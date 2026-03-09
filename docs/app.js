@@ -368,12 +368,9 @@ function renderTable() {
 
   const rows = state.filtered.map((submission, index) => {
     const isSelected = submission.number === state.selectedNumber
-    const rowClasses = [isSelected ? 'is-selected' : '', submission.isFeatured ? 'is-featured' : '']
-      .filter(Boolean)
-      .join(' ')
 
     return `
-      <tr data-issue-number="${submission.number}" class="${rowClasses}">
+      <tr data-issue-number="${submission.number}" class="${isSelected ? 'is-selected' : ''}">
         <td><span class="rank-pill">#${index + 1}</span></td>
         <td>
           <div class="agent-cell">
@@ -431,8 +428,7 @@ function renderDetail() {
 
   const chips = submission.labels
     .map(label => {
-      const chipClass =
-        label === 'validated' ? 'chip chip-validated' : label === 'featured' ? 'chip chip-featured' : 'chip'
+      const chipClass = label === 'validated' ? 'chip chip-validated' : 'chip'
       return `<span class="${chipClass}">${escapeHtml(label)}</span>`
     })
     .join('')
@@ -448,8 +444,6 @@ function renderDetail() {
 
   const warning = submission.state === 'closed'
     ? '<div class="warning-box">This submission issue is closed. It remains visible because the validated metadata is still public.</div>'
-    : submission.isFeatured
-      ? '<div class="warning-box">Featured reference project for this benchmark site.</div>'
     : submission.isMock
       ? `<div class="warning-box">Mock preview entry seeded from official branding. Source: ${escapeHtml(submission.sourceTitle || 'official product page')}.</div>`
       : ''

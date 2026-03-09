@@ -1,5 +1,5 @@
 export const MOCK_SOURCE_SUMMARY =
-  'mock preview seeded from official product sites and repositories, with Flowith OS featured as the reference project'
+  'mock preview seeded from official product sites and repositories'
 
 export const MOCK_SUBMISSIONS = [
   {
@@ -10,9 +10,8 @@ export const MOCK_SUBMISSIONS = [
     createdAt: '2026-03-09T07:55:00.000Z',
     updatedAt: '2026-03-09T07:55:00.000Z',
     closedAt: null,
-    labels: ['mock', 'preview', 'featured'],
+    labels: ['mock', 'preview'],
     isMock: true,
-    isFeatured: true,
     agentName: 'Flowith OS',
     agentVersion: 'Reference Preview',
     benchmarkVariant: 'AgentIF-OneDay',
@@ -29,7 +28,7 @@ export const MOCK_SUBMISSIONS = [
     manifestUrl: '',
     runMetaUrl: '',
     notes:
-      'Featured mock preview entry for Flowith OS, the reference project behind this benchmark push. This is not a real benchmark submission.',
+      'Mock preview entry seeded from the official FlowithOS landing page. This is not a real benchmark submission.',
     searchText: 'flowith os reference preview agentif-oneday',
     agentIconUrl: './assets/agents/flowith.ico',
     agentHomeUrl: 'https://flowith.io/flowithos/',
@@ -46,7 +45,6 @@ export const MOCK_SUBMISSIONS = [
     closedAt: null,
     labels: ['mock', 'preview'],
     isMock: true,
-    isFeatured: false,
     agentName: 'Manus',
     agentVersion: 'Preview',
     benchmarkVariant: 'AgentIF-OneDay',
@@ -80,7 +78,6 @@ export const MOCK_SUBMISSIONS = [
     closedAt: null,
     labels: ['mock', 'preview'],
     isMock: true,
-    isFeatured: false,
     agentName: 'Kimi',
     agentVersion: 'K2.5',
     benchmarkVariant: 'AgentIF-OneDay',
@@ -114,7 +111,6 @@ export const MOCK_SUBMISSIONS = [
     closedAt: null,
     labels: ['mock', 'preview'],
     isMock: true,
-    isFeatured: false,
     agentName: 'OpenClaw',
     agentVersion: 'main',
     benchmarkVariant: 'AgentIF-OneDay',
@@ -149,7 +145,6 @@ export const MOCK_SUBMISSIONS = [
     closedAt: null,
     labels: ['mock', 'preview'],
     isMock: true,
-    isFeatured: false,
     agentName: 'Devin',
     agentVersion: 'GA',
     benchmarkVariant: 'AgentIF-OneDay',
@@ -183,7 +178,6 @@ export const MOCK_SUBMISSIONS = [
     closedAt: null,
     labels: ['mock', 'preview'],
     isMock: true,
-    isFeatured: false,
     agentName: 'Genspark',
     agentVersion: 'Super Agent',
     benchmarkVariant: 'AgentIF-OneDay',
@@ -217,7 +211,6 @@ export const MOCK_SUBMISSIONS = [
     closedAt: null,
     labels: ['mock', 'preview'],
     isMock: true,
-    isFeatured: false,
     agentName: 'Perplexity',
     agentVersion: 'Assistant',
     benchmarkVariant: 'AgentIF-OneDay',
