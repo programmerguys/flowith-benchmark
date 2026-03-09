@@ -53,6 +53,18 @@ select {
   font: inherit;
 }
 
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 .page-shell {
   width: min(1320px, calc(100vw - 32px));
   margin: 0 auto;
@@ -82,37 +94,67 @@ select {
   gap: 10px;
 }
 
-.locale-switcher {
+.locale-select-shell {
+  position: relative;
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  padding: 4px;
-  border-radius: 999px;
+  min-width: 174px;
+  min-height: 44px;
+  padding: 0 40px 0 40px;
+  border-radius: 14px;
   border: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(10, 20, 14, 0.96);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent 55%),
+    rgba(10, 20, 14, 0.96);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    0 10px 30px rgba(0, 0, 0, 0.18);
 }
 
-.locale-button {
-  min-width: 62px;
-  min-height: 36px;
-  padding: 0 12px;
-  border: 0;
-  border-radius: 999px;
-  background: transparent;
+.locale-select-shell:focus-within {
+  border-color: rgba(125, 248, 166, 0.32);
+  box-shadow:
+    0 0 0 3px rgba(125, 248, 166, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    0 10px 30px rgba(0, 0, 0, 0.18);
+}
+
+.locale-select-icon,
+.locale-select-chevron {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   color: var(--muted);
+  pointer-events: none;
+}
+
+.locale-select-icon {
+  left: 14px;
+}
+
+.locale-select-chevron {
+  right: 14px;
+}
+
+.locale-select-icon svg,
+.locale-select-chevron svg {
+  width: 16px;
+  height: 16px;
+}
+
+.locale-select-control {
+  width: 100%;
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  outline: none;
+  appearance: none;
+  background: transparent;
+  color: var(--text);
   cursor: pointer;
-  transition:
-    background 160ms ease,
-    color 160ms ease;
-}
-
-.locale-button:hover {
-  color: var(--text);
-}
-
-.locale-button.is-active {
-  background: rgba(125, 248, 166, 0.14);
-  color: var(--text);
 }
 
 .project-badge {
@@ -760,14 +802,13 @@ select {
     width: 100%;
   }
 
-  .locale-switcher,
+  .locale-select-shell,
   .project-badge,
   .filter-control,
   .panel-controls .action-button {
     width: 100%;
   }
 
-  .locale-button,
   .filter-control select,
   .action-button,
   .project-badge {

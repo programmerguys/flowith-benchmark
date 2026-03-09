@@ -1,5 +1,5 @@
 import { MOCK_SUBMISSIONS } from './mock-submissions.js'
-import { createI18n, getInitialLocale } from './i18n.js'
+import { LOCALE_CONFIG, createI18n, getInitialLocale } from './i18n.js'
 
 const REPO_OWNER = 'programmerguys'
 const REPO_NAME = 'flowith-benchmark'
@@ -48,7 +48,7 @@ const state = {
 const elements = {
   metaDescription: document.getElementById('page-description'),
   githubStarsLabel: document.getElementById('github-stars-label'),
-  localeButtons: Array.from(document.querySelectorAll('[data-locale-button]')),
+  localeSelect: document.getElementById('locale-select'),
   agentCommand: document.getElementById('agent-command'),
   copyCommandButton: document.getElementById('copy-command-button'),
   copyFeedback: document.getElementById('copy-feedback'),
@@ -195,11 +195,7 @@ function applyStaticTranslations() {
     node.setAttribute('aria-label', t(node.dataset.i18nAriaLabel))
   })
 
-  elements.localeButtons.forEach(button => {
-    const isActive = button.dataset.localeButton === state.locale
-    button.classList.toggle('is-active', isActive)
-    button.setAttribute('aria-pressed', String(isActive))
-  })
+  elements.localeSelect.value = state.locale
 }
 
 function parseNumber(value) {
@@ -673,10 +669,10 @@ elements.variantFilter.addEventListener('change', event => {
   renderDetail()
 })
 
-elements.localeButtons.forEach(button => {
-  button.addEventListener('click', () => {
-    applyLocale(button.dataset.localeButton)
-  })
+elements.localeSelect.addEventListener('change', event => {
+  const nextLocale = event.target.value
+  if (!LOCALE_CONFIG[nextLocale]) return
+  applyLocale(nextLocale)
 })
 
 applyStaticTranslations()
