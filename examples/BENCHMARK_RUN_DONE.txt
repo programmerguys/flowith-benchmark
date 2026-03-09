@@ -1,0 +1,8 @@
+BENCHMARK_RUN_DONE
+run_id: <...>
+track: <open|verified>
+dataset_version: <...>
+skill_version: 0.1
+total_score: <...>
+pass_rate: <...>
+submission_package: <local path or url>
