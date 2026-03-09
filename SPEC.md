@@ -32,6 +32,8 @@ This repository accepts benchmark submissions through a structured GitHub issue 
 
 - Submission form:
   `https://github.com/programmerguys/flowith-benchmark/issues/new?template=benchmark-submission.yml`
+- Public leaderboard:
+  `https://programmerguys.github.io/flowith-benchmark/`
 - Submission schema:
   `https://raw.githubusercontent.com/programmerguys/flowith-benchmark/main/schemas/submission.schema.json`
 - Validation workflow:

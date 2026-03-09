@@ -22,6 +22,7 @@ This skill is a **benchmark protocol**, not a hardcoded script.
 Repository reference:
 
 - Repository: `https://github.com/programmerguys/flowith-benchmark`
+- Leaderboard: `https://programmerguys.github.io/flowith-benchmark/`
 - Skill spec: `https://raw.githubusercontent.com/programmerguys/flowith-benchmark/main/SKILL.md`
 - Submission form: `https://github.com/programmerguys/flowith-benchmark/issues/new?template=benchmark-submission.yml`
 - Submission schema: `https://raw.githubusercontent.com/programmerguys/flowith-benchmark/main/schemas/submission.schema.json`

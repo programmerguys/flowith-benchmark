@@ -26,11 +26,12 @@ This repository exists to keep the benchmark protocol versioned independently fr
 ## Links
 
 - Repository: [programmerguys/flowith-benchmark](https://github.com/programmerguys/flowith-benchmark)
+- Leaderboard: [programmerguys.github.io/flowith-benchmark](https://programmerguys.github.io/flowith-benchmark/)
 - Skill: [SKILL.md](https://raw.githubusercontent.com/programmerguys/flowith-benchmark/main/SKILL.md)
 - Submission form: [Benchmark Submission Issue](https://github.com/programmerguys/flowith-benchmark/issues/new?template=benchmark-submission.yml)
 - Submission schema: [submission.schema.json](https://raw.githubusercontent.com/programmerguys/flowith-benchmark/main/schemas/submission.schema.json)
 - Validation workflow: [validate-submission.yml](https://github.com/programmerguys/flowith-benchmark/blob/main/.github/workflows/validate-submission.yml)
-- Leaderboard source page: `docs/index.html` (GitHub Pages friendly)
+- Leaderboard source page: [docs/index.html](https://github.com/programmerguys/flowith-benchmark/blob/main/docs/index.html)
 
 ## Submit Results
 
