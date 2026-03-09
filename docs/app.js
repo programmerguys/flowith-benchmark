@@ -1,3 +1,5 @@
+import { MOCK_SOURCE_SUMMARY, MOCK_SUBMISSIONS } from './mock-submissions.js'
+
 const REPO_OWNER = 'programmerguys'
 const REPO_NAME = 'flowith-benchmark'
 const API_BASE = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}`
@@ -5,6 +7,10 @@ const SKILL_URL = `https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/
 const ISSUE_LABEL = 'validated'
 const EXCLUDED_LABELS = new Set(['smoke-test'])
 const AGENT_PROMPT = `Fetch ${SKILL_URL} and follow it.`
+const DATA_MODE = {
+  LIVE: 'live',
+  MOCK: 'mock'
+}
 const FIELD_MAP = {
   'Agent Name': 'agentName',
   'Agent Version': 'agentVersion',
@@ -23,6 +29,7 @@ const FIELD_MAP = {
 }
 
 const state = {
+  dataMode: DATA_MODE.LIVE,
   submissions: [],
   filtered: [],
   selectedNumber: null,
@@ -38,6 +45,7 @@ const elements = {
   variantFilter: document.getElementById('variant-filter'),
   leaderboardBody: document.getElementById('leaderboard-body'),
   detailCard: document.getElementById('detail-card'),
+  statSubmissionsLabel: document.getElementById('stat-submissions-label'),
   statSubmissions: document.getElementById('stat-submissions'),
   statAgents: document.getElementById('stat-agents'),
   statTopScore: document.getElementById('stat-top-score'),
@@ -50,6 +58,10 @@ let copyResetTimer = null
 
 function setTerminal(lines) {
   elements.terminal.textContent = Array.isArray(lines) ? lines.join('\n') : String(lines)
+}
+
+function isMockMode() {
+  return state.dataMode === DATA_MODE.MOCK
 }
 
 function renderAgentPrompt() {
@@ -222,6 +234,54 @@ function compareSubmissions(a, b) {
   return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
 }
 
+function renderAgentAvatar(submission, className = 'agent-avatar') {
+  if (submission.agentIconUrl) {
+    return `<img class="${className}" src="${escapeHtml(submission.agentIconUrl)}" alt="${escapeHtml(submission.agentName)}" loading="lazy" />`
+  }
+
+  const initials = submission.agentName
+    .split(/\s+/)
+    .slice(0, 2)
+    .map(part => part[0] || '')
+    .join('')
+    .toUpperCase()
+
+  return `<span class="${className} agent-avatar-fallback">${escapeHtml(initials || 'AG')}</span>`
+}
+
+function getSubmissionLinks(submission) {
+  if (submission.isMock) {
+    return [
+      ['Official Site', submission.agentHomeUrl],
+      ['Source', submission.sourceUrl]
+    ].filter(([, url], index, entries) => {
+      if (!url) return false
+      return entries.findIndex(([, candidate]) => candidate === url) === index
+    })
+  }
+
+  return [
+    ['Issue', submission.issueUrl],
+    ['Repository', submission.submissionRepoUrl],
+    ['Submission Package', submission.submissionPackageUrl],
+    ['Score Summary', submission.scoreSummaryUrl],
+    ['Manifest', submission.manifestUrl],
+    ['Run Metadata', submission.runMetaUrl]
+  ].filter(([, url]) => Boolean(url))
+}
+
+function renderSubmissionLinks(submission, limit = Infinity) {
+  const links = getSubmissionLinks(submission).slice(0, limit)
+  if (links.length === 0) return 'n/a'
+
+  return links
+    .map(
+      ([label, url]) =>
+        `<a href="${escapeHtml(url)}" target="_blank" rel="noreferrer">${escapeHtml(label.toLowerCase())}</a>`
+    )
+    .join(' / ')
+}
+
 async function fetchIssues() {
   const issues = []
 
@@ -257,13 +317,19 @@ function updateSummary() {
   const uniqueAgents = new Set(submissions.map(item => item.agentName.toLowerCase()))
   const variants = new Set(submissions.map(item => item.benchmarkVariant))
   const topScore = submissions.length > 0 ? submissions[0].totalScoreText : 'n/a'
+  const renderedAt = formatDateTime(new Date().toISOString())
 
+  elements.statSubmissionsLabel.textContent = isMockMode() ? 'Mock Entries' : 'Validated Submissions'
   elements.statSubmissions.textContent = String(submissions.length)
   elements.statAgents.textContent = String(uniqueAgents.size)
   elements.statTopScore.textContent = String(topScore)
   elements.statVariants.textContent = String(variants.size)
-  elements.lastUpdated.textContent = `Last updated: ${formatDateTime(new Date().toISOString())}`
-  elements.dataSource.textContent = `Source: ${API_BASE}/issues?labels=${ISSUE_LABEL}`
+  elements.lastUpdated.textContent = isMockMode()
+    ? `Preview updated: ${renderedAt}`
+    : `Last updated: ${renderedAt}`
+  elements.dataSource.textContent = isMockMode()
+    ? `Source: ${MOCK_SOURCE_SUMMARY}`
+    : `Source: ${API_BASE}/issues?labels=${ISSUE_LABEL}`
 }
 
 function renderVariantFilter() {
@@ -294,7 +360,7 @@ function renderTable() {
   if (state.filtered.length === 0) {
     elements.leaderboardBody.innerHTML = `
       <tr>
-        <td colspan="7" class="table-empty">No validated submissions found for the current filter.</td>
+        <td colspan="7" class="table-empty">No leaderboard entries found for the current filter.</td>
       </tr>
     `
     return
@@ -302,17 +368,18 @@ function renderTable() {
 
   const rows = state.filtered.map((submission, index) => {
     const isSelected = submission.number === state.selectedNumber
-    const packageUrl = submission.submissionPackageUrl
-      ? `<a href="${escapeHtml(submission.submissionPackageUrl)}" target="_blank" rel="noreferrer">package</a>`
-      : 'n/a'
-    const issueUrl = `<a href="${escapeHtml(submission.issueUrl)}" target="_blank" rel="noreferrer">issue</a>`
 
     return `
       <tr data-issue-number="${submission.number}" class="${isSelected ? 'is-selected' : ''}">
         <td><span class="rank-pill">#${index + 1}</span></td>
         <td>
-          <strong>${escapeHtml(submission.agentName)}</strong>
-          <span class="score-sub">${escapeHtml(submission.agentVersion)}</span>
+          <div class="agent-cell">
+            ${renderAgentAvatar(submission)}
+            <div>
+              <strong>${escapeHtml(submission.agentName)}</strong>
+              <span class="score-sub">${escapeHtml(submission.agentVersion)}</span>
+            </div>
+          </div>
         </td>
         <td>${escapeHtml(submission.benchmarkVariant)}</td>
         <td>
@@ -321,7 +388,7 @@ function renderTable() {
         </td>
         <td>${escapeHtml(submission.passRateText)}</td>
         <td>${escapeHtml(formatDate(submission.createdAt))}</td>
-        <td>${packageUrl} / ${issueUrl}</td>
+        <td>${renderSubmissionLinks(submission, 2)}</td>
       </tr>
     `
   })
@@ -343,18 +410,11 @@ function renderDetail() {
   if (!submission) {
     elements.detailCard.className = 'detail-card detail-empty'
     elements.detailCard.textContent =
-      'No validated submissions match the current filter.'
+      'No leaderboard entries match the current filter.'
     return
   }
 
-  const links = [
-    ['Issue', submission.issueUrl],
-    ['Repository', submission.submissionRepoUrl],
-    ['Submission Package', submission.submissionPackageUrl],
-    ['Score Summary', submission.scoreSummaryUrl],
-    ['Manifest', submission.manifestUrl],
-    ['Run Metadata', submission.runMetaUrl]
-  ]
+  const links = getSubmissionLinks(submission)
     .filter(([, url]) => Boolean(url))
     .map(
       ([label, url]) => `
@@ -384,15 +444,23 @@ function renderDetail() {
 
   const warning = submission.state === 'closed'
     ? '<div class="warning-box">This submission issue is closed. It remains visible because the validated metadata is still public.</div>'
-    : ''
+    : submission.isMock
+      ? `<div class="warning-box">Mock preview entry seeded from official branding. Source: ${escapeHtml(submission.sourceTitle || 'official product page')}.</div>`
+      : ''
+  const linksHeading = submission.isMock ? 'Product Links' : 'Evidence Links'
 
   elements.detailCard.className = 'detail-card'
   elements.detailCard.innerHTML = `
     <div class="chip-row">${chips}</div>
-    <h3 class="detail-title">${escapeHtml(submission.agentName)}</h3>
-    <p class="detail-subtitle">
-      ${escapeHtml(submission.agentVersion)} · ${escapeHtml(submission.benchmarkVariant)} · run ${escapeHtml(submission.runId)}
-    </p>
+    <div class="detail-identity">
+      ${renderAgentAvatar(submission, 'agent-avatar agent-avatar-detail')}
+      <div>
+        <h3 class="detail-title">${escapeHtml(submission.agentName)}</h3>
+        <p class="detail-subtitle">
+          ${escapeHtml(submission.agentVersion)} · ${escapeHtml(submission.benchmarkVariant)} · run ${escapeHtml(submission.runId)}
+        </p>
+      </div>
+    </div>
 
     <div class="detail-meta">Submitted ${escapeHtml(formatDateTime(submission.createdAt))}</div>
 
@@ -419,7 +487,7 @@ function renderDetail() {
     </div>
 
     <div class="detail-section">
-      <h3>Evidence Links</h3>
+      <h3>${escapeHtml(linksHeading)}</h3>
       <div class="detail-links">${links || '<div class="detail-item">No public links provided.</div>'}</div>
     </div>
 
@@ -442,7 +510,10 @@ async function loadLeaderboard() {
   try {
     const issues = await fetchIssues()
     const filteredIssues = issues.filter(issue => !shouldExcludeIssue(issue))
-    state.submissions = filteredIssues.map(toSubmission).sort(compareSubmissions)
+    state.dataMode = filteredIssues.length > 0 ? DATA_MODE.LIVE : DATA_MODE.MOCK
+    state.submissions = (filteredIssues.length > 0 ? filteredIssues.map(toSubmission) : MOCK_SUBMISSIONS).sort(
+      compareSubmissions
+    )
     renderVariantFilter()
     applyFilters()
     updateSummary()
@@ -455,10 +526,12 @@ async function loadLeaderboard() {
       `skill=main/SKILL.md`,
       `issues_total=${issues.length}`,
       `issues_rendered=${state.submissions.length}`,
+      `mode=${state.dataMode}`,
       'status=ok'
     ])
   } catch (error) {
     console.error('[Leaderboard] failed to load submissions', error)
+    state.dataMode = DATA_MODE.LIVE
     state.submissions = []
     state.filtered = []
     updateSummary()
