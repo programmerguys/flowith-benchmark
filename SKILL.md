@@ -19,6 +19,13 @@ This skill is a **benchmark protocol**, not a hardcoded script.
 
 ## 1) Inputs you must fetch
 
+Repository reference:
+
+- Repository: `https://github.com/programmerguys/flowith-benchmark`
+- Skill spec: `https://raw.githubusercontent.com/programmerguys/flowith-benchmark/main/SKILL.md`
+- Submission form: `https://github.com/programmerguys/flowith-benchmark/issues/new?template=benchmark-submission.yml`
+- Submission schema: `https://raw.githubusercontent.com/programmerguys/flowith-benchmark/main/schemas/submission.schema.json`
+
 1. **Task pack (dataset):**
    **Default: AgentIF-OneDay**
    Download from:
@@ -32,14 +39,15 @@ This skill is a **benchmark protocol**, not a hardcoded script.
    - `VERSION` (dataset version id)
 
 2. **Judge spec:**
-   Download from: `<JUDGE_SPEC_URL>`
+   There is no canonical public judge bundle hosted in this repository yet.
+   If you use a public judge bundle, include its URL in your submission notes.
    Expected files:
    - `rubric.md`
    - `score-schema.json`
    - `judge-config.json`
 
 3. **Skill spec (this file):**
-   URL: `<SKILL_URL>`
+   URL: `https://raw.githubusercontent.com/programmerguys/flowith-benchmark/main/SKILL.md`
    Keep a local copy in run artifacts.
 
 ## 2) Tracks
@@ -134,7 +142,7 @@ Save as:
 
 Before packaging, run validation:
 
-1. Schema validation (`submission.schema.json`)
+1. Schema validation against `https://raw.githubusercontent.com/programmerguys/flowith-benchmark/main/schemas/submission.schema.json`
 2. File completeness check
 3. Hash manifest generation
 4. Reproducibility sanity check (can another evaluator parse all records?)
@@ -159,9 +167,13 @@ Create `submission_<run_id>.zip` with:
 - `skill_snapshot/benchmark.txt` (copy of this skill)
 - `dataset_snapshot/VERSION`
 
-Upload target:
-- Organizer server: `<UPLOAD_URL>`
-- Or self-host and provide public URL
+Evidence publishing target:
+- Your own public GitHub repository or release assets
+- Or self-hosted public URLs with stable access
+
+Submission intake target:
+- `https://github.com/programmerguys/flowith-benchmark/issues/new?template=benchmark-submission.yml`
+- Submit public links only. Do not upload large evidence bundles into the Flowith Benchmark repository.
 
 ## 10) Leaderboard fields (public)
 
@@ -208,3 +220,24 @@ total_score: <...>
 pass_rate: <...>
 submission_package: <local path or url>
 ```
+
+## 14) Public submission workflow
+
+After the run is complete:
+
+1. Publish the evidence bundle in your own public GitHub repository or release.
+2. Prepare direct public links for:
+   - `submission_<run_id>.zip`
+   - `score_summary.json`
+   - `manifest.json`
+   - optional `run_meta.json`
+3. Open a submission issue at:
+   - `https://github.com/programmerguys/flowith-benchmark/issues/new?template=benchmark-submission.yml`
+4. Fill in agent name, agent version, protocol version, run id, score, pass rate, repository URL, ref, and evidence links.
+5. Wait for automated validation. The repository will apply `validated` or `needs-info`.
+
+Rules:
+
+- Use direct public file URLs for machine-readable artifacts.
+- Do not submit GitHub `blob` links for JSON files.
+- If your submission changes, edit the issue instead of opening a duplicate.

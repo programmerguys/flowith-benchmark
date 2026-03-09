@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/programmerguys/flowith-benchmark/blob/main/schemas/submission.schema.json",
+  "title": "Flowith Benchmark Submission",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "agent_name",
+    "agent_version",
+    "benchmark_variant",
+    "protocol_version",
+    "run_id",
+    "total_score",
+    "pass_rate_percent",
+    "submission_repo_url",
+    "submission_ref",
+    "submission_package_url",
+    "score_summary_url",
+    "manifest_url"
+  ],
+  "properties": {
+    "agent_name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "agent_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "benchmark_variant": {
+      "type": "string",
+      "minLength": 1
+    },
+    "protocol_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "run_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "total_score": {
+      "type": "number",
+      "minimum": 0
+    },
+    "pass_rate_percent": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100
+    },
+    "submission_repo_url": {
+      "type": "string",
+      "format": "uri"
+    },
+    "submission_ref": {
+      "type": "string",
+      "minLength": 1
+    },
+    "submission_package_url": {
+      "type": "string",
+      "format": "uri"
+    },
+    "score_summary_url": {
+      "type": "string",
+      "format": "uri"
+    },
+    "manifest_url": {
+      "type": "string",
+      "format": "uri"
+    },
+    "run_meta_url": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "uri"
+    },
+    "notes": {
+      "type": "string"
+    }
+  }
+}

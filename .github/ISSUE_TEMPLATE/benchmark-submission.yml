@@ -1,0 +1,142 @@
+name: Benchmark Submission
+description: Submit a public benchmark result and evidence links.
+title: "[Submission]: "
+labels:
+  - submission
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Submit public links only.
+
+        Before opening this form:
+        - Publish your benchmark evidence in your own public GitHub repository or release.
+        - Use direct public URLs for JSON and ZIP artifacts.
+        - Do not paste GitHub `blob` links for machine-readable files such as `score_summary.json`, `manifest.json`, or `run_meta.json`.
+
+  - type: input
+    id: agent_name
+    attributes:
+      label: Agent Name
+      description: Public name of the agent or product.
+      placeholder: MyAgent
+    validations:
+      required: true
+
+  - type: input
+    id: agent_version
+    attributes:
+      label: Agent Version
+      description: Version or release identifier for this run.
+      placeholder: 1.0.0
+    validations:
+      required: true
+
+  - type: dropdown
+    id: benchmark_variant
+    attributes:
+      label: Benchmark Variant
+      description: Dataset or benchmark track used for this run.
+      options:
+        - AgentIF-OneDay
+    validations:
+      required: true
+
+  - type: input
+    id: protocol_version
+    attributes:
+      label: Protocol Version
+      description: Version of the benchmark protocol used for the run.
+      placeholder: "0.1"
+    validations:
+      required: true
+
+  - type: input
+    id: run_id
+    attributes:
+      label: Run ID
+      description: Globally unique run identifier.
+      placeholder: run-20260309-120000-abcd
+    validations:
+      required: true
+
+  - type: input
+    id: total_score
+    attributes:
+      label: Total Score
+      description: Final total score for this run.
+      placeholder: "87"
+    validations:
+      required: true
+
+  - type: input
+    id: pass_rate
+    attributes:
+      label: Pass Rate
+      description: Accepts `76%`, `76`, or `0.76`.
+      placeholder: "76%"
+    validations:
+      required: true
+
+  - type: input
+    id: submission_repo_url
+    attributes:
+      label: Submission Repository URL
+      description: Public repository containing the run context or release.
+      placeholder: https://github.com/example/my-agent-benchmark-results
+    validations:
+      required: true
+
+  - type: input
+    id: submission_ref
+    attributes:
+      label: Submission Ref
+      description: Commit SHA, tag, or release tag associated with this submission.
+      placeholder: v1.0.0
+    validations:
+      required: true
+
+  - type: input
+    id: submission_package_url
+    attributes:
+      label: Submission Package URL
+      description: Direct public URL to `submission_<run_id>.zip`.
+      placeholder: https://github.com/example/my-agent-benchmark-results/releases/download/v1.0.0/submission_run-20260309.zip
+    validations:
+      required: true
+
+  - type: input
+    id: score_summary_url
+    attributes:
+      label: Score Summary URL
+      description: Direct public URL to `score_summary.json`.
+      placeholder: https://raw.githubusercontent.com/example/my-agent-benchmark-results/main/score_summary.json
+    validations:
+      required: true
+
+  - type: input
+    id: manifest_url
+    attributes:
+      label: Manifest URL
+      description: Direct public URL to `manifest.json`.
+      placeholder: https://raw.githubusercontent.com/example/my-agent-benchmark-results/main/manifest.json
+    validations:
+      required: true
+
+  - type: input
+    id: run_meta_url
+    attributes:
+      label: Run Metadata URL
+      description: Optional direct public URL to `run_meta.json`.
+      placeholder: https://raw.githubusercontent.com/example/my-agent-benchmark-results/main/run_meta.json
+    validations:
+      required: false
+
+  - type: textarea
+    id: notes
+    attributes:
+      label: Additional Notes
+      description: Optional context, caveats, or reproduction notes.
+      placeholder: Include anything reviewers should know.
+    validations:
+      required: false

@@ -26,6 +26,20 @@ This repository contains protocol artifacts only.
 - New datasets should be added as separate protocol variants instead of overloading one file.
 - Submission schema, judge config, and examples can be added later without changing repository purpose.
 
+## Submission Intake
+
+This repository accepts benchmark submissions through a structured GitHub issue flow.
+
+- Submission form:
+  `https://github.com/programmerguys/flowith-benchmark/issues/new?template=benchmark-submission.yml`
+- Submission schema:
+  `https://raw.githubusercontent.com/programmerguys/flowith-benchmark/main/schemas/submission.schema.json`
+- Validation workflow:
+  `https://github.com/programmerguys/flowith-benchmark/blob/main/.github/workflows/validate-submission.yml`
+
+Evidence stays in the submitter's own public repository or release assets.
+This repository stores benchmark protocol artifacts and submission metadata intake only.
+
 ## Release Policy
 
 - Tag protocol releases semantically.
