@@ -1,8 +1,16 @@
 const REPO_OWNER = 'programmerguys'
 const REPO_NAME = 'flowith-benchmark'
 const API_BASE = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}`
+const REPO_URL = `https://github.com/${REPO_OWNER}/${REPO_NAME}`
+const SKILL_URL = `https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/main/SKILL.md`
+const SUBMISSION_FORM_URL = `${REPO_URL}/issues/new?template=benchmark-submission.yml`
 const ISSUE_LABEL = 'validated'
 const EXCLUDED_LABELS = new Set(['smoke-test'])
+const AGENT_PROMPT = [
+  `Fetch ${SKILL_URL}`,
+  'Follow it exactly, run the Flowith Benchmark, publish the evidence to a public GitHub repo or release, then submit the result via',
+  SUBMISSION_FORM_URL
+].join('\n')
 const FIELD_MAP = {
   'Agent Name': 'agentName',
   'Agent Version': 'agentVersion',
@@ -28,6 +36,9 @@ const state = {
 }
 
 const elements = {
+  agentCommand: document.getElementById('agent-command'),
+  copyCommandButton: document.getElementById('copy-command-button'),
+  copyFeedback: document.getElementById('copy-feedback'),
   terminal: document.getElementById('status-terminal'),
   refreshButton: document.getElementById('refresh-button'),
   variantFilter: document.getElementById('variant-filter'),
@@ -41,8 +52,36 @@ const elements = {
   dataSource: document.getElementById('data-source')
 }
 
+let copyResetTimer = null
+
 function setTerminal(lines) {
   elements.terminal.textContent = Array.isArray(lines) ? lines.join('\n') : String(lines)
+}
+
+function renderAgentPrompt() {
+  elements.agentCommand.textContent = AGENT_PROMPT
+}
+
+async function copyAgentPrompt() {
+  try {
+    await navigator.clipboard.writeText(AGENT_PROMPT)
+    elements.copyCommandButton.textContent = 'Copied'
+    elements.copyFeedback.textContent = 'Prompt copied. Paste it into your agent to pull the benchmark skill.'
+
+    if (copyResetTimer) {
+      window.clearTimeout(copyResetTimer)
+    }
+
+    copyResetTimer = window.setTimeout(() => {
+      elements.copyCommandButton.textContent = 'Copy Prompt'
+      elements.copyFeedback.textContent =
+        'Your agent should fetch the skill, run the benchmark, host the evidence publicly, then submit the score.'
+    }, 2200)
+  } catch (error) {
+    console.error('[Leaderboard] failed to copy prompt', error)
+    elements.copyFeedback.textContent =
+      'Copy failed in this browser context. Open the raw SKILL.md link and copy the prompt manually.'
+  }
 }
 
 function escapeHtml(value) {
@@ -400,6 +439,8 @@ async function loadLeaderboard() {
   setTerminal([
     '$ fetch validated submissions',
     `repo=${REPO_OWNER}/${REPO_NAME}`,
+    `skill=main/SKILL.md`,
+    'submit=benchmark-submission.yml',
     `labels=${ISSUE_LABEL}`,
     'status=connecting'
   ])
@@ -417,6 +458,7 @@ async function loadLeaderboard() {
     setTerminal([
       '$ fetch validated submissions',
       `repo=${REPO_OWNER}/${REPO_NAME}`,
+      `skill=main/SKILL.md`,
       `issues_total=${issues.length}`,
       `issues_rendered=${state.submissions.length}`,
       'status=ok'
@@ -432,6 +474,7 @@ async function loadLeaderboard() {
     setTerminal([
       '$ fetch validated submissions',
       `repo=${REPO_OWNER}/${REPO_NAME}`,
+      `skill=main/SKILL.md`,
       `status=error`,
       String(error instanceof Error ? error.message : error)
     ])
@@ -444,6 +487,10 @@ elements.refreshButton.addEventListener('click', () => {
   void loadLeaderboard()
 })
 
+elements.copyCommandButton.addEventListener('click', () => {
+  void copyAgentPrompt()
+})
+
 elements.variantFilter.addEventListener('change', event => {
   state.variantFilter = event.target.value
   applyFilters()
@@ -452,4 +499,5 @@ elements.variantFilter.addEventListener('change', event => {
   renderDetail()
 })
 
+renderAgentPrompt()
 void loadLeaderboard()

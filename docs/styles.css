@@ -59,16 +59,80 @@ select {
   padding: 28px 0 40px;
 }
 
+.site-bar {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.brand {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 4px;
+  text-decoration: none;
+  color: var(--text);
+}
+
+.brand-title {
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.brand-subtitle {
+  font-size: 12px;
+  color: var(--muted);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.site-links,
+.hero-actions,
+.hero-chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.button-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0 16px;
+  border-radius: 999px;
+  border: 1px solid var(--line-strong);
+  background: rgba(14, 26, 18, 0.92);
+  color: var(--text);
+  text-decoration: none;
+  transition:
+    background 160ms ease,
+    border-color 160ms ease,
+    transform 160ms ease;
+}
+
+.button-link:hover {
+  background: rgba(24, 43, 30, 0.96);
+  border-color: rgba(125, 248, 166, 0.24);
+  transform: translateY(-1px);
+}
+
+.button-link-primary {
+  background: linear-gradient(135deg, rgba(18, 46, 29, 0.98), rgba(24, 67, 41, 0.98));
+  border-color: rgba(125, 248, 166, 0.24);
+}
+
 .hero {
   display: grid;
-  grid-template-columns: minmax(0, 1.7fr) minmax(320px, 0.9fr);
+  grid-template-columns: minmax(0, 1.15fr) minmax(360px, 0.95fr);
   gap: 22px;
   align-items: stretch;
   margin-bottom: 22px;
 }
 
 .hero-copy,
-.hero-terminal,
+.hero-command,
 .panel {
   backdrop-filter: blur(18px);
   background:
@@ -81,6 +145,13 @@ select {
 
 .hero-copy {
   padding: 32px;
+}
+
+.hero-command {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
 .eyebrow,
@@ -107,9 +178,13 @@ select {
 
 .hero h1 {
   margin: 0;
-  font-size: clamp(42px, 7vw, 96px);
-  line-height: 0.9;
-  max-width: 8ch;
+  font-size: clamp(46px, 7vw, 96px);
+  line-height: 0.92;
+  max-width: 10ch;
+}
+
+.hero h1 span {
+  color: var(--accent);
 }
 
 .hero-text {
@@ -119,15 +194,54 @@ select {
   color: var(--muted);
 }
 
-.hero-terminal {
+.hero-chip-row {
+  margin-top: 22px;
+}
+
+.hero-actions {
+  margin-top: 26px;
+}
+
+.command-top {
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.command-top h2 {
+  margin: 4px 0 0;
+  font-size: 24px;
+}
+
+.command-block {
+  margin: 0;
+  padding: 20px;
+  border-radius: 20px;
+  border: 1px solid rgba(125, 248, 166, 0.18);
+  background: rgba(3, 10, 7, 0.98);
+  color: #93ffb9;
+  font-size: 14px;
+  line-height: 1.8;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.copy-feedback {
+  margin: 0;
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+.hero-terminal {
   overflow: hidden;
   background:
     linear-gradient(180deg, rgba(5, 14, 9, 0.98), rgba(3, 10, 7, 0.98)),
     #060b08;
-  border-color: rgba(118, 235, 152, 0.18);
+  border: 1px solid rgba(118, 235, 152, 0.18);
+  border-radius: 20px;
   color: #c9ffd6;
+  margin-top: auto;
 }
 
 .terminal-bar {
@@ -198,10 +312,16 @@ select {
 .action-button {
   padding: 10px 16px;
   cursor: pointer;
+  transition:
+    background 160ms ease,
+    border-color 160ms ease,
+    transform 160ms ease;
 }
 
 .action-button:hover {
   background: rgba(24, 43, 30, 0.96);
+  border-color: rgba(125, 248, 166, 0.24);
+  transform: translateY(-1px);
 }
 
 .summary-grid {
@@ -440,6 +560,11 @@ select {
     grid-template-columns: 1fr;
   }
 
+  .site-bar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
   .panel-summary,
   .panel-table,
   .panel-detail {
@@ -455,12 +580,13 @@ select {
   }
 
   .hero-copy,
-  .hero-terminal,
+  .hero-command,
   .panel {
     border-radius: 20px;
   }
 
   .hero-copy,
+  .hero-command,
   .panel {
     padding: 18px;
   }
@@ -469,16 +595,27 @@ select {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
+  .site-bar,
+  .command-top,
   .panel-header {
     flex-direction: column;
   }
 
+  .site-links,
+  .hero-actions {
+    width: 100%;
+  }
+
+  .site-links .button-link,
+  .hero-actions .button-link,
   .filter-control {
     width: 100%;
   }
 
   .filter-control select,
-  .action-button {
+  .action-button,
+  .site-links .button-link,
+  .hero-actions .button-link {
     width: 100%;
   }
 }

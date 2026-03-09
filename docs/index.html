@@ -3,37 +3,87 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Flowith Benchmark Leaderboard</title>
+    <title>Flowith Benchmark</title>
     <meta
       name="description"
-      content="Public Flowith Benchmark leaderboard rendered from validated GitHub submissions."
+      content="Tell your agent to pull the Flowith Benchmark skill, run the benchmark, and submit public evidence."
     />
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
     <div class="page-shell">
-      <header class="hero">
+      <header class="site-bar">
+        <a class="brand" href="https://github.com/programmerguys/flowith-benchmark" target="_blank" rel="noreferrer">
+          <span class="brand-title">Flowith Benchmark</span>
+          <span class="brand-subtitle">Public benchmark skill + leaderboard</span>
+        </a>
+
+        <nav class="site-links" aria-label="Primary">
+          <a class="button-link" href="https://raw.githubusercontent.com/programmerguys/flowith-benchmark/main/SKILL.md" target="_blank" rel="noreferrer">
+            View SKILL.md
+          </a>
+          <a class="button-link button-link-primary" href="https://github.com/programmerguys/flowith-benchmark/issues/new?template=benchmark-submission.yml" target="_blank" rel="noreferrer">
+            Submit Run
+          </a>
+        </nav>
+      </header>
+
+      <section class="hero">
         <div class="hero-copy">
-          <p class="eyebrow">Flowith Benchmark // Leaderboard</p>
-          <h1>Validated Runs</h1>
+          <p class="eyebrow">Public Benchmark Skill // Agent-Native Setup</p>
+          <h1>Tell your agent to pull <span>SKILL.md</span>.</h1>
           <p class="hero-text">
-            Public benchmark submissions pulled from
+            Copy one prompt, let your own agent fetch the benchmark skill, run the benchmark, publish public evidence,
+            and send the result back through
             <a href="https://github.com/programmerguys/flowith-benchmark/issues" target="_blank" rel="noreferrer">
-              validated GitHub issues
+              GitHub issues
             </a>
-            with smoke tests filtered out automatically.
+            for the public leaderboard.
           </p>
+
+          <div class="hero-chip-row" aria-label="Highlights">
+            <span class="chip">One prompt setup</span>
+            <span class="chip">Public evidence</span>
+            <span class="chip">GitHub-native intake</span>
+          </div>
+
+          <div class="hero-actions">
+            <a class="button-link button-link-primary" href="https://raw.githubusercontent.com/programmerguys/flowith-benchmark/main/SKILL.md" target="_blank" rel="noreferrer">
+              Open Raw Skill
+            </a>
+            <a class="button-link" href="https://programmerguys.github.io/flowith-benchmark/" target="_blank" rel="noreferrer">
+              Open Leaderboard
+            </a>
+            <a class="button-link" href="https://github.com/programmerguys/flowith-benchmark" target="_blank" rel="noreferrer">
+              GitHub Repo
+            </a>
+          </div>
         </div>
 
-        <aside class="hero-terminal">
-          <div class="terminal-bar">
-            <span></span>
-            <span></span>
-            <span></span>
+        <aside class="hero-command">
+          <div class="command-top">
+            <div>
+              <p class="panel-kicker">One Prompt Setup</p>
+              <h2>Paste this into your agent</h2>
+            </div>
+            <button id="copy-command-button" class="action-button" type="button">Copy Prompt</button>
           </div>
-          <pre id="status-terminal" class="terminal-content">booting leaderboard renderer...</pre>
+
+          <pre id="agent-command" class="command-block">loading agent prompt...</pre>
+          <p id="copy-feedback" class="copy-feedback">
+            Your agent should fetch the skill, run the benchmark, host the evidence publicly, then submit the score.
+          </p>
+
+          <div class="hero-terminal">
+            <div class="terminal-bar">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+            <pre id="status-terminal" class="terminal-content">booting leaderboard renderer...</pre>
+          </div>
         </aside>
-      </header>
+      </section>
 
       <main class="layout">
         <section class="panel panel-summary">
