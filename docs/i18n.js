@@ -26,7 +26,6 @@ const TRANSLATIONS = {
       description: 'Public benchmark skill, submission intake, and leaderboard for agent runs.'
     },
     nav: {
-      brandSubtitle: 'Public benchmark skill + leaderboard',
       repoAriaLabel: 'Flowith Benchmark GitHub repository',
       githubStars: '{count} stars',
       localeLabel: 'Language'
@@ -57,7 +56,6 @@ const TRANSLATIONS = {
       empty: 'No leaderboard entries found for the current filter.',
       rank: 'Rank',
       agent: 'Agent',
-      variant: 'Variant',
       score: 'Score',
       passRate: 'Pass Rate',
       submitted: 'Submitted',
@@ -144,7 +142,6 @@ const TRANSLATIONS = {
       description: '面向 Agent 跑分的公开 benchmark skill、提交入口与排行榜。'
     },
     nav: {
-      brandSubtitle: '公开 benchmark skill + 排行榜',
       repoAriaLabel: 'Flowith Benchmark GitHub 仓库',
       githubStars: '{count} 星标',
       localeLabel: '语言'
@@ -175,7 +172,6 @@ const TRANSLATIONS = {
       empty: '当前筛选条件下没有排行榜条目。',
       rank: '排名',
       agent: 'Agent',
-      variant: '变体',
       score: '分数',
       passRate: '通过率',
       submitted: '提交时间',
@@ -254,7 +250,6 @@ const TRANSLATIONS = {
       description: 'Agent ラン向けの公開 benchmark skill、投稿導線、ランキング。'
     },
     nav: {
-      brandSubtitle: '公開 benchmark skill + ランキング',
       repoAriaLabel: 'Flowith Benchmark GitHub リポジトリ',
       githubStars: '{count} スター',
       localeLabel: '言語'
@@ -285,7 +280,6 @@ const TRANSLATIONS = {
       empty: '現在のフィルターに一致するランキング項目はありません。',
       rank: '順位',
       agent: 'Agent',
-      variant: 'バリアント',
       score: 'スコア',
       passRate: '通過率',
       submitted: '提出日',

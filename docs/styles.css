@@ -61,30 +61,10 @@ select {
 
 .site-bar {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   gap: 18px;
   align-items: center;
-  margin-bottom: 18px;
-}
-
-.brand {
-  display: inline-flex;
-  flex-direction: column;
-  gap: 4px;
-  text-decoration: none;
-  color: var(--text);
-}
-
-.brand-title {
-  font-size: 22px;
-  font-weight: 700;
-}
-
-.brand-subtitle {
-  font-size: 12px;
-  color: var(--muted);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  margin-bottom: 16px;
 }
 
 .site-controls {
@@ -187,7 +167,7 @@ select {
 
 .hero {
   display: grid;
-  grid-template-columns: minmax(0, 0.96fr) minmax(400px, 1.04fr);
+  grid-template-columns: minmax(0, 1.08fr) minmax(320px, 0.92fr);
   gap: 22px;
   align-items: stretch;
   margin-bottom: 22px;
@@ -367,6 +347,7 @@ select {
 .panel-controls {
   display: flex;
   align-items: flex-end;
+  justify-content: flex-end;
   gap: 12px;
   flex-wrap: wrap;
 }
@@ -428,7 +409,7 @@ select {
 }
 
 .filter-control select {
-  min-width: 180px;
+  min-width: 200px;
   padding: 10px 14px;
 }
 
@@ -445,6 +426,7 @@ select {
 
 .hero-leaderboard .leaderboard-table {
   min-width: 0;
+  table-layout: fixed;
 }
 
 .hero-leaderboard .leaderboard-table th,
@@ -452,15 +434,35 @@ select {
   padding: 12px 10px;
 }
 
+.hero-leaderboard .leaderboard-table th:nth-child(5),
 .hero-leaderboard .leaderboard-table th:nth-child(6),
-.hero-leaderboard .leaderboard-table th:nth-child(7),
-.hero-leaderboard .leaderboard-table td:nth-child(6),
-.hero-leaderboard .leaderboard-table td:nth-child(7) {
+.hero-leaderboard .leaderboard-table td:nth-child(5),
+.hero-leaderboard .leaderboard-table td:nth-child(6) {
   display: none;
+}
+
+.hero-leaderboard .leaderboard-table th:nth-child(1),
+.hero-leaderboard .leaderboard-table td:nth-child(1) {
+  width: 86px;
+}
+
+.hero-leaderboard .leaderboard-table th:nth-child(3),
+.hero-leaderboard .leaderboard-table td:nth-child(3) {
+  width: 122px;
+}
+
+.hero-leaderboard .leaderboard-table th:nth-child(4),
+.hero-leaderboard .leaderboard-table td:nth-child(4) {
+  width: 92px;
 }
 
 .hero-leaderboard .agent-cell {
   gap: 10px;
+  min-width: 0;
+}
+
+.hero-leaderboard .agent-cell > div {
+  min-width: 0;
 }
 
 .hero-leaderboard .agent-avatar {
@@ -468,14 +470,28 @@ select {
   height: 34px;
 }
 
+.hero-leaderboard .agent-cell strong,
+.hero-leaderboard .agent-cell .score-sub {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .hero-leaderboard .score-main {
   font-size: 18px;
+  font-variant-numeric: tabular-nums;
+}
+
+.hero-leaderboard .rank-pill,
+.hero-leaderboard td:nth-child(4) {
+  font-variant-numeric: tabular-nums;
 }
 
 .leaderboard-table {
   width: 100%;
   border-collapse: collapse;
-  min-width: 760px;
+  min-width: 680px;
 }
 
 .leaderboard-table th,

@@ -462,7 +462,7 @@ function renderTable() {
   if (state.filtered.length === 0) {
     elements.leaderboardBody.innerHTML = `
       <tr>
-        <td colspan="7" class="table-empty">${escapeHtml(t('leaderboard.empty'))}</td>
+        <td colspan="6" class="table-empty">${escapeHtml(t('leaderboard.empty'))}</td>
       </tr>
     `
     return
@@ -483,7 +483,6 @@ function renderTable() {
             </div>
           </div>
         </td>
-        <td>${escapeHtml(getBenchmarkVariant(submission))}</td>
         <td>
           <span class="score-main">${escapeHtml(getTotalScoreText(submission))}</span>
           <span class="score-sub">${escapeHtml(t('leaderboard.protocolInline', { version: getProtocolVersion(submission) }))}</span>
