@@ -30,7 +30,7 @@ export const MOCK_SUBMISSIONS = [
     notes:
       'Mock preview entry seeded from the official FlowithOS landing page. This is not a real benchmark submission.',
     searchText: 'flowith os reference preview agentif-oneday',
-    agentIconUrl: './assets/agents/flowith.ico',
+    agentIconUrl: './assets/agents/flowith.png',
     agentHomeUrl: 'https://flowith.io/flowithos/',
     sourceUrl: 'https://flowith.io/flowithos/',
     sourceTitle: 'FlowithOS - Flowith'

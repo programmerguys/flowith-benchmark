@@ -95,6 +95,71 @@ select {
   gap: 10px;
 }
 
+.project-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 44px;
+  padding: 0 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(10, 20, 14, 0.96);
+  color: var(--text);
+  text-decoration: none;
+}
+
+.project-badge:hover {
+  border-color: rgba(125, 248, 166, 0.24);
+  background: rgba(18, 32, 23, 0.98);
+}
+
+.project-badge-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  color: var(--text);
+}
+
+.project-badge-icon svg {
+  width: 18px;
+  height: 18px;
+}
+
+.project-badge-copy {
+  display: inline-flex;
+  flex-direction: column;
+  line-height: 1.1;
+  gap: 2px;
+}
+
+.project-badge-copy strong {
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.project-badge-copy span {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.project-badge-tag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 48px;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: rgba(255, 190, 115, 0.12);
+  border: 1px solid rgba(255, 190, 115, 0.24);
+  color: #ffd59d;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
 .button-link {
   display: inline-flex;
   align-items: center;
@@ -192,6 +257,54 @@ select {
   margin: 18px 0 0;
   line-height: 1.7;
   color: var(--muted);
+}
+
+.ecosystem-strip {
+  margin-top: 24px;
+}
+
+.ecosystem-kicker {
+  margin: 0 0 12px;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.ecosystem-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.ecosystem-agent {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: rgba(12, 22, 16, 0.78);
+  color: var(--text);
+  text-decoration: none;
+}
+
+.ecosystem-agent:hover {
+  border-color: rgba(125, 248, 166, 0.24);
+  background: rgba(18, 32, 23, 0.88);
+}
+
+.ecosystem-agent img {
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  object-fit: cover;
+  background: rgba(7, 15, 10, 0.96);
+}
+
+.ecosystem-agent span {
+  font-size: 13px;
 }
 
 .hero-chip-row {
@@ -643,6 +756,7 @@ select {
     width: 100%;
   }
 
+  .project-badge,
   .site-links .button-link,
   .hero-actions .button-link,
   .filter-control {
@@ -651,6 +765,7 @@ select {
 
   .filter-control select,
   .action-button,
+  .project-badge,
   .site-links .button-link,
   .hero-actions .button-link {
     width: 100%;
