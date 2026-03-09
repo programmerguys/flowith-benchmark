@@ -1,10 +1,10 @@
 export const MOCK_SOURCE_SUMMARY =
-  'mock preview seeded from official product sites and repositories'
+  'reference preview seeded from official product sites and repositories'
 
 export const MOCK_SUBMISSIONS = [
   {
     number: 9000,
-    title: 'Mock Submission: Flowith OS',
+    title: 'Reference Submission: Flowith OS',
     issueUrl: 'https://flowith.io/flowithos/',
     state: 'open',
     createdAt: '2026-03-09T07:55:00.000Z',
@@ -28,7 +28,8 @@ export const MOCK_SUBMISSIONS = [
     manifestUrl: '',
     runMetaUrl: '',
     notes:
-      'Mock preview entry seeded from the official FlowithOS landing page. This is not a real benchmark submission.',
+      'Reference entry sourced from the official FlowithOS landing page.',
+    mockNoteKey: 'flowith',
     searchText: 'flowith os reference preview agentif-oneday',
     agentIconUrl: './assets/agents/flowith.png',
     agentHomeUrl: 'https://flowith.io/flowithos/',
@@ -37,7 +38,7 @@ export const MOCK_SUBMISSIONS = [
   },
   {
     number: 9001,
-    title: 'Mock Submission: Manus',
+    title: 'Reference Submission: Manus',
     issueUrl: 'https://manus.im',
     state: 'open',
     createdAt: '2026-03-09T08:00:00.000Z',
@@ -61,7 +62,8 @@ export const MOCK_SUBMISSIONS = [
     manifestUrl: '',
     runMetaUrl: '',
     notes:
-      'Mock preview entry seeded from the official Manus site title and icon. This is not a real benchmark submission.',
+      'Reference entry sourced from the official Manus site title and icon.',
+    mockNoteKey: 'manus',
     searchText: 'manus preview agentif-oneday',
     agentIconUrl: './assets/agents/manus.png',
     agentHomeUrl: 'https://manus.im',
@@ -70,7 +72,7 @@ export const MOCK_SUBMISSIONS = [
   },
   {
     number: 9002,
-    title: 'Mock Submission: Kimi',
+    title: 'Reference Submission: Kimi',
     issueUrl: 'https://www.kimi.com',
     state: 'open',
     createdAt: '2026-03-09T08:05:00.000Z',
@@ -94,7 +96,8 @@ export const MOCK_SUBMISSIONS = [
     manifestUrl: '',
     runMetaUrl: '',
     notes:
-      'Mock preview entry seeded from the Kimi official site title and icon. This is not a real benchmark submission.',
+      'Reference entry sourced from the Kimi official site title and icon.',
+    mockNoteKey: 'kimi',
     searchText: 'kimi k2.5 agentif-oneday',
     agentIconUrl: './assets/agents/kimi.ico',
     agentHomeUrl: 'https://www.kimi.com',
@@ -103,7 +106,7 @@ export const MOCK_SUBMISSIONS = [
   },
   {
     number: 9003,
-    title: 'Mock Submission: OpenClaw',
+    title: 'Reference Submission: OpenClaw',
     issueUrl: 'https://github.com/openclaw/openclaw',
     state: 'open',
     createdAt: '2026-03-09T08:10:00.000Z',
@@ -127,7 +130,8 @@ export const MOCK_SUBMISSIONS = [
     manifestUrl: '',
     runMetaUrl: '',
     notes:
-      'Mock preview entry seeded from the official OpenClaw repository branding. This is not a real benchmark submission.',
+      'Reference entry sourced from the official OpenClaw repository branding.',
+    mockNoteKey: 'openclaw',
     searchText: 'openclaw main agentif-oneday',
     agentIconUrl: './assets/agents/openclaw.jpg',
     agentHomeUrl: 'https://github.com/openclaw/openclaw',
@@ -137,7 +141,7 @@ export const MOCK_SUBMISSIONS = [
   },
   {
     number: 9004,
-    title: 'Mock Submission: Devin',
+    title: 'Reference Submission: Devin',
     issueUrl: 'https://devin.ai',
     state: 'open',
     createdAt: '2026-03-09T08:15:00.000Z',
@@ -161,7 +165,8 @@ export const MOCK_SUBMISSIONS = [
     manifestUrl: '',
     runMetaUrl: '',
     notes:
-      'Mock preview entry seeded from the Devin official site title and icon. This is not a real benchmark submission.',
+      'Reference entry sourced from the Devin official site title and icon.',
+    mockNoteKey: 'devin',
     searchText: 'devin ga agentif-oneday',
     agentIconUrl: './assets/agents/devin.ico',
     agentHomeUrl: 'https://devin.ai',
@@ -170,7 +175,7 @@ export const MOCK_SUBMISSIONS = [
   },
   {
     number: 9005,
-    title: 'Mock Submission: Genspark',
+    title: 'Reference Submission: Genspark',
     issueUrl: 'https://www.genspark.ai',
     state: 'open',
     createdAt: '2026-03-09T08:20:00.000Z',
@@ -194,7 +199,8 @@ export const MOCK_SUBMISSIONS = [
     manifestUrl: '',
     runMetaUrl: '',
     notes:
-      'Mock preview entry seeded from the Genspark official site branding and favicon. This is not a real benchmark submission.',
+      'Reference entry sourced from the Genspark official site branding and favicon.',
+    mockNoteKey: 'genspark',
     searchText: 'genspark super agent agentif-oneday',
     agentIconUrl: './assets/agents/genspark.ico',
     agentHomeUrl: 'https://www.genspark.ai',
@@ -203,7 +209,7 @@ export const MOCK_SUBMISSIONS = [
   },
   {
     number: 9006,
-    title: 'Mock Submission: Perplexity',
+    title: 'Reference Submission: Perplexity',
     issueUrl: 'https://www.perplexity.ai',
     state: 'open',
     createdAt: '2026-03-09T08:25:00.000Z',
@@ -227,7 +233,8 @@ export const MOCK_SUBMISSIONS = [
     manifestUrl: '',
     runMetaUrl: '',
     notes:
-      'Mock preview entry seeded from the Perplexity official site branding and favicon. This is not a real benchmark submission.',
+      'Reference entry sourced from the Perplexity official site branding and favicon.',
+    mockNoteKey: 'perplexity',
     searchText: 'perplexity assistant agentif-oneday',
     agentIconUrl: './assets/agents/perplexity.ico',
     agentHomeUrl: 'https://www.perplexity.ai',

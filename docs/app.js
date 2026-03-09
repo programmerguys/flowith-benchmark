@@ -1,4 +1,5 @@
-import { MOCK_SOURCE_SUMMARY, MOCK_SUBMISSIONS } from './mock-submissions.js'
+import { MOCK_SUBMISSIONS } from './mock-submissions.js'
+import { createI18n, getInitialLocale } from './i18n.js'
 
 const REPO_OWNER = 'programmerguys'
 const REPO_NAME = 'flowith-benchmark'
@@ -6,11 +7,15 @@ const API_BASE = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}`
 const SKILL_URL = `https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/main/SKILL.md`
 const ISSUE_LABEL = 'validated'
 const EXCLUDED_LABELS = new Set(['smoke-test'])
+const HIDDEN_DETAIL_LABELS = new Set(['mock', 'preview'])
+const GITHUB_STARS = '2.4k'
 const AGENT_PROMPT = `Fetch ${SKILL_URL} and follow it.`
+
 const DATA_MODE = {
   LIVE: 'live',
   MOCK: 'mock'
 }
+
 const FIELD_MAP = {
   'Agent Name': 'agentName',
   'Agent Version': 'agentVersion',
@@ -28,7 +33,11 @@ const FIELD_MAP = {
   'Additional Notes': 'notes'
 }
 
+const i18n = createI18n(getInitialLocale())
+
 const state = {
+  locale: i18n.locale,
+  hasLoaded: false,
   dataMode: DATA_MODE.LIVE,
   submissions: [],
   filtered: [],
@@ -37,10 +46,12 @@ const state = {
 }
 
 const elements = {
+  metaDescription: document.getElementById('page-description'),
+  githubStarsLabel: document.getElementById('github-stars-label'),
+  localeButtons: Array.from(document.querySelectorAll('[data-locale-button]')),
   agentCommand: document.getElementById('agent-command'),
   copyCommandButton: document.getElementById('copy-command-button'),
   copyFeedback: document.getElementById('copy-feedback'),
-  terminal: document.getElementById('status-terminal'),
   refreshButton: document.getElementById('refresh-button'),
   variantFilter: document.getElementById('variant-filter'),
   leaderboardBody: document.getElementById('leaderboard-body'),
@@ -56,38 +67,8 @@ const elements = {
 
 let copyResetTimer = null
 
-function setTerminal(lines) {
-  elements.terminal.textContent = Array.isArray(lines) ? lines.join('\n') : String(lines)
-}
-
-function isMockMode() {
-  return state.dataMode === DATA_MODE.MOCK
-}
-
-function renderAgentPrompt() {
-  elements.agentCommand.textContent = AGENT_PROMPT
-}
-
-async function copyAgentPrompt() {
-  try {
-    await navigator.clipboard.writeText(AGENT_PROMPT)
-    elements.copyCommandButton.textContent = 'Copied'
-    elements.copyFeedback.textContent = 'Copied. Send it to your agent.'
-
-    if (copyResetTimer) {
-      window.clearTimeout(copyResetTimer)
-    }
-
-    copyResetTimer = window.setTimeout(() => {
-      elements.copyCommandButton.textContent = 'Copy Prompt'
-      elements.copyFeedback.textContent =
-        'Short prompt. Full instructions live in SKILL.md.'
-    }, 2200)
-  } catch (error) {
-    console.error('[Leaderboard] failed to copy prompt', error)
-    elements.copyFeedback.textContent =
-      'Copy failed here. Open the raw SKILL.md link and copy it manually.'
-  }
+function t(key, values) {
+  return i18n.t(key, values)
 }
 
 function escapeHtml(value) {
@@ -99,24 +80,126 @@ function escapeHtml(value) {
     .replaceAll("'", '&#39;')
 }
 
+function translateKey(path, fallback) {
+  const translated = t(path)
+  return translated === path ? fallback : translated
+}
+
+function getKnownLabel(label) {
+  return translateKey(`labels.${label}`, label)
+}
+
+function getAgentName(submission) {
+  return submission.agentName || t('common.unknownAgent')
+}
+
+function getAgentVersion(submission) {
+  return submission.agentVersion || t('common.unknown')
+}
+
+function getBenchmarkVariant(submission) {
+  return submission.benchmarkVariant || t('common.unknownVariant')
+}
+
+function getProtocolVersion(submission) {
+  return submission.protocolVersion || t('common.unknown')
+}
+
+function getRunId(submission) {
+  return submission.runId || t('common.unknown')
+}
+
+function getTotalScoreText(submission) {
+  return submission.totalScoreText || t('common.na')
+}
+
+function getPassRateText(submission) {
+  return submission.passRateText || t('common.na')
+}
+
+function getSubmissionRef(submission) {
+  return submission.submissionRef || t('common.na')
+}
+
+function getSubmissionNotes(submission) {
+  if (submission.mockNoteKey) {
+    return translateKey(`mockNotes.${submission.mockNoteKey}`, submission.notes || '')
+  }
+
+  return submission.notes || ''
+}
+
 function formatDate(value) {
-  if (!value) return 'unknown'
-  return new Intl.DateTimeFormat('en', {
+  if (!value) return t('common.unknown')
+
+  const date = new Date(value)
+  if (Number.isNaN(date.getTime())) return t('common.unknown')
+
+  return new Intl.DateTimeFormat(i18n.config.dateLocale, {
     year: 'numeric',
     month: 'short',
     day: '2-digit'
-  }).format(new Date(value))
+  }).format(date)
 }
 
 function formatDateTime(value) {
-  if (!value) return 'unknown'
-  return new Intl.DateTimeFormat('en', {
+  if (!value) return t('common.unknown')
+
+  const date = new Date(value)
+  if (Number.isNaN(date.getTime())) return t('common.unknown')
+
+  return new Intl.DateTimeFormat(i18n.config.dateLocale, {
     year: 'numeric',
     month: 'short',
     day: '2-digit',
     hour: '2-digit',
     minute: '2-digit'
-  }).format(new Date(value))
+  }).format(date)
+}
+
+function renderAgentPrompt() {
+  elements.agentCommand.textContent = AGENT_PROMPT
+}
+
+async function copyAgentPrompt() {
+  try {
+    await navigator.clipboard.writeText(AGENT_PROMPT)
+    elements.copyCommandButton.textContent = t('hero.copyCopied')
+    elements.copyFeedback.textContent = t('hero.copyFeedbackCopied')
+
+    if (copyResetTimer) {
+      window.clearTimeout(copyResetTimer)
+    }
+
+    copyResetTimer = window.setTimeout(() => {
+      elements.copyCommandButton.textContent = t('hero.copyPrompt')
+      elements.copyFeedback.textContent = t('hero.copyFeedbackDefault')
+    }, 2200)
+  } catch (error) {
+    console.error('[Leaderboard] failed to copy prompt', error)
+    elements.copyFeedback.textContent = t('hero.copyFeedbackError')
+  }
+}
+
+function applyStaticTranslations() {
+  document.documentElement.lang = i18n.config.htmlLang
+  document.title = t('meta.title')
+  elements.metaDescription.setAttribute('content', t('meta.description'))
+  elements.githubStarsLabel.textContent = t('nav.githubStars', { count: GITHUB_STARS })
+
+  document.querySelectorAll('[data-i18n]').forEach(node => {
+    node.textContent = t(node.dataset.i18n)
+  })
+
+  document.querySelectorAll('[data-i18n-aria-label]').forEach(node => {
+    node.setAttribute('aria-label', t(node.dataset.i18nAriaLabel))
+  })
+
+  elements.localeButtons.forEach(button => {
+    const isActive = button.dataset.localeButton === state.locale
+    button.classList.toggle('is-active', isActive)
+    button.setAttribute('aria-pressed', String(isActive))
+  })
 }
 
 function parseNumber(value) {
@@ -169,13 +252,16 @@ function parseIssueForm(body) {
     const raw = sections[label] || ''
     normalized[key] = raw === '_No response_' ? '' : raw
   }
+
   return normalized
 }
 
 function shouldExcludeIssue(issue) {
   if (issue.pull_request) return true
+
   const labels = new Set((issue.labels || []).map(label => label.name))
   if (!labels.has(ISSUE_LABEL)) return true
+
   return Array.from(EXCLUDED_LABELS).some(label => labels.has(label))
 }
 
@@ -194,15 +280,15 @@ function toSubmission(issue) {
     updatedAt: issue.updated_at,
     closedAt: issue.closed_at,
     labels,
-    agentName: parsed.agentName || 'Unknown Agent',
-    agentVersion: parsed.agentVersion || 'unknown',
-    benchmarkVariant: parsed.benchmarkVariant || 'Unknown Variant',
-    protocolVersion: parsed.protocolVersion || 'unknown',
+    agentName: parsed.agentName || '',
+    agentVersion: parsed.agentVersion || '',
+    benchmarkVariant: parsed.benchmarkVariant || '',
+    protocolVersion: parsed.protocolVersion || '',
     runId: parsed.runId || `issue-${issue.number}`,
     totalScore,
-    totalScoreText: parsed.totalScoreRaw || 'n/a',
+    totalScoreText: parsed.totalScoreRaw || '',
     passRate,
-    passRateText: parsed.passRateRaw || 'n/a',
+    passRateText: parsed.passRateRaw || '',
     submissionRepoUrl: parsed.submissionRepoUrl,
     submissionRef: parsed.submissionRef,
     submissionPackageUrl: parsed.submissionPackageUrl,
@@ -236,10 +322,10 @@ function compareSubmissions(a, b) {
 
 function renderAgentAvatar(submission, className = 'agent-avatar') {
   if (submission.agentIconUrl) {
-    return `<img class="${className}" src="${escapeHtml(submission.agentIconUrl)}" alt="${escapeHtml(submission.agentName)}" loading="lazy" />`
+    return `<img class="${className}" src="${escapeHtml(submission.agentIconUrl)}" alt="${escapeHtml(getAgentName(submission))}" loading="lazy" />`
   }
 
-  const initials = submission.agentName
+  const initials = getAgentName(submission)
     .split(/\s+/)
     .slice(0, 2)
     .map(part => part[0] || '')
@@ -249,35 +335,39 @@ function renderAgentAvatar(submission, className = 'agent-avatar') {
   return `<span class="${className} agent-avatar-fallback">${escapeHtml(initials || 'AG')}</span>`
 }
 
+function dedupeLinks(links) {
+  return links.filter(([, url], index, entries) => {
+    if (!url) return false
+    return entries.findIndex(([, candidate]) => candidate === url) === index
+  })
+}
+
 function getSubmissionLinks(submission) {
   if (submission.isMock) {
-    return [
-      ['Official Site', submission.agentHomeUrl],
-      ['Source', submission.sourceUrl]
-    ].filter(([, url], index, entries) => {
-      if (!url) return false
-      return entries.findIndex(([, candidate]) => candidate === url) === index
-    })
+    return dedupeLinks([
+      ['officialSite', submission.agentHomeUrl],
+      ['source', submission.sourceUrl]
+    ])
   }
 
-  return [
-    ['Issue', submission.issueUrl],
-    ['Repository', submission.submissionRepoUrl],
-    ['Submission Package', submission.submissionPackageUrl],
-    ['Score Summary', submission.scoreSummaryUrl],
-    ['Manifest', submission.manifestUrl],
-    ['Run Metadata', submission.runMetaUrl]
-  ].filter(([, url]) => Boolean(url))
+  return dedupeLinks([
+    ['issue', submission.issueUrl],
+    ['repository', submission.submissionRepoUrl],
+    ['submissionPackage', submission.submissionPackageUrl],
+    ['scoreSummary', submission.scoreSummaryUrl],
+    ['manifest', submission.manifestUrl],
+    ['runMetadata', submission.runMetaUrl]
+  ])
 }
 
 function renderSubmissionLinks(submission, limit = Infinity) {
   const links = getSubmissionLinks(submission).slice(0, limit)
-  if (links.length === 0) return 'n/a'
+  if (links.length === 0) return t('common.na')
 
   return links
     .map(
-      ([label, url]) =>
-        `<a href="${escapeHtml(url)}" target="_blank" rel="noreferrer">${escapeHtml(label.toLowerCase())}</a>`
+      ([key, url]) =>
+        `<a href="${escapeHtml(url)}" target="_blank" rel="noreferrer">${escapeHtml(t(`links.${key}`))}</a>`
     )
     .join(' / ')
 }
@@ -314,43 +404,55 @@ async function fetchIssues() {
 
 function updateSummary() {
   const submissions = state.filtered
-  const uniqueAgents = new Set(submissions.map(item => item.agentName.toLowerCase()))
-  const variants = new Set(submissions.map(item => item.benchmarkVariant))
-  const topScore = submissions.length > 0 ? submissions[0].totalScoreText : 'n/a'
+  const uniqueAgents = new Set(submissions.map(item => getAgentName(item).toLowerCase()))
+  const variants = new Set(submissions.map(item => getBenchmarkVariant(item)))
+  const topScore = submissions.length > 0 ? getTotalScoreText(submissions[0]) : t('common.na')
   const renderedAt = formatDateTime(new Date().toISOString())
 
-  elements.statSubmissionsLabel.textContent = isMockMode() ? 'Mock Entries' : 'Validated Submissions'
+  elements.statSubmissionsLabel.textContent = isMockMode()
+    ? t('summary.mockEntries')
+    : t('summary.validatedSubmissions')
   elements.statSubmissions.textContent = String(submissions.length)
   elements.statAgents.textContent = String(uniqueAgents.size)
   elements.statTopScore.textContent = String(topScore)
   elements.statVariants.textContent = String(variants.size)
   elements.lastUpdated.textContent = isMockMode()
-    ? `Preview updated: ${renderedAt}`
-    : `Last updated: ${renderedAt}`
+    ? t('summary.previewUpdated', { time: renderedAt })
+    : t('summary.lastUpdated', { time: renderedAt })
   elements.dataSource.textContent = isMockMode()
-    ? `Source: ${MOCK_SOURCE_SUMMARY}`
-    : `Source: ${API_BASE}/issues?labels=${ISSUE_LABEL}`
+    ? t('summary.mockSource')
+    : t('summary.githubSource')
+}
+
+function renderPendingSummary() {
+  elements.statSubmissionsLabel.textContent = t('summary.validatedSubmissions')
+  elements.lastUpdated.textContent = t('summary.lastUpdated', { time: t('summary.pending') })
+  elements.dataSource.textContent = t('summary.githubSource')
 }
 
 function renderVariantFilter() {
-  const variants = Array.from(new Set(state.submissions.map(item => item.benchmarkVariant))).sort()
-  const options = ['<option value="all">All variants</option>']
+  const variants = Array.from(new Set(state.submissions.map(item => getBenchmarkVariant(item)))).sort()
+  const options = [`<option value="all">${escapeHtml(t('leaderboard.allVariants'))}</option>`]
+
   for (const variant of variants) {
     const selected = state.variantFilter === variant ? ' selected' : ''
     options.push(`<option value="${escapeHtml(variant)}"${selected}>${escapeHtml(variant)}</option>`)
   }
+
   elements.variantFilter.innerHTML = options.join('')
 }
 
 function applyFilters() {
   const next = state.submissions.filter(item => {
-    if (state.variantFilter !== 'all' && item.benchmarkVariant !== state.variantFilter) {
+    if (state.variantFilter !== 'all' && getBenchmarkVariant(item) !== state.variantFilter) {
       return false
     }
+
     return true
   })
 
   state.filtered = next.sort(compareSubmissions)
+
   if (!state.filtered.some(item => item.number === state.selectedNumber)) {
     state.selectedNumber = state.filtered[0]?.number ?? null
   }
@@ -360,7 +462,7 @@ function renderTable() {
   if (state.filtered.length === 0) {
     elements.leaderboardBody.innerHTML = `
       <tr>
-        <td colspan="7" class="table-empty">No leaderboard entries found for the current filter.</td>
+        <td colspan="7" class="table-empty">${escapeHtml(t('leaderboard.empty'))}</td>
       </tr>
     `
     return
@@ -376,17 +478,17 @@ function renderTable() {
           <div class="agent-cell">
             ${renderAgentAvatar(submission)}
             <div>
-              <strong>${escapeHtml(submission.agentName)}</strong>
-              <span class="score-sub">${escapeHtml(submission.agentVersion)}</span>
+              <strong>${escapeHtml(getAgentName(submission))}</strong>
+              <span class="score-sub">${escapeHtml(getAgentVersion(submission))}</span>
             </div>
           </div>
         </td>
-        <td>${escapeHtml(submission.benchmarkVariant)}</td>
+        <td>${escapeHtml(getBenchmarkVariant(submission))}</td>
         <td>
-          <span class="score-main">${escapeHtml(submission.totalScoreText)}</span>
-          <span class="score-sub">protocol ${escapeHtml(submission.protocolVersion)}</span>
+          <span class="score-main">${escapeHtml(getTotalScoreText(submission))}</span>
+          <span class="score-sub">${escapeHtml(t('leaderboard.protocolInline', { version: getProtocolVersion(submission) }))}</span>
         </td>
-        <td>${escapeHtml(submission.passRateText)}</td>
+        <td>${escapeHtml(getPassRateText(submission))}</td>
         <td>${escapeHtml(formatDate(submission.createdAt))}</td>
         <td>${renderSubmissionLinks(submission, 2)}</td>
       </tr>
@@ -407,88 +509,96 @@ function renderTable() {
 
 function renderDetail() {
   const submission = state.filtered.find(item => item.number === state.selectedNumber)
+
   if (!submission) {
     elements.detailCard.className = 'detail-card detail-empty'
-    elements.detailCard.textContent =
-      'No leaderboard entries match the current filter.'
+    elements.detailCard.textContent = t('detail.empty')
     return
   }
 
   const links = getSubmissionLinks(submission)
-    .filter(([, url]) => Boolean(url))
     .map(
-      ([label, url]) => `
+      ([key, url]) => `
         <a class="detail-link" href="${escapeHtml(url)}" target="_blank" rel="noreferrer">
-          ${escapeHtml(label)}
+          ${escapeHtml(t(`links.${key}`))}
           <span>${escapeHtml(url)}</span>
         </a>
       `
     )
     .join('')
 
-  const chips = submission.labels
+  const visibleLabels = submission.labels
+    .filter(label => !HIDDEN_DETAIL_LABELS.has(label))
     .map(label => {
       const chipClass = label === 'validated' ? 'chip chip-validated' : 'chip'
-      return `<span class="${chipClass}">${escapeHtml(label)}</span>`
+      return `<span class="${chipClass}">${escapeHtml(getKnownLabel(label))}</span>`
     })
     .join('')
 
-  const notes = submission.notes
+  const notes = getSubmissionNotes(submission)
     ? `
       <div class="detail-section">
-        <h3>Notes</h3>
-        <div class="detail-item">${escapeHtml(submission.notes)}</div>
+        <h3>${escapeHtml(t('detail.notes'))}</h3>
+        <div class="detail-item">${escapeHtml(getSubmissionNotes(submission))}</div>
       </div>
     `
     : ''
 
   const warning = submission.state === 'closed'
-    ? '<div class="warning-box">This submission issue is closed. It remains visible because the validated metadata is still public.</div>'
+    ? `<div class="warning-box">${escapeHtml(t('detail.closedWarning'))}</div>`
     : submission.isMock
-      ? `<div class="warning-box">Mock preview entry seeded from official branding. Source: ${escapeHtml(submission.sourceTitle || 'official product page')}.</div>`
+      ? `<div class="warning-box">${escapeHtml(t('detail.mockWarning', { source: submission.sourceTitle || t('common.unknown') }))}</div>`
       : ''
-  const linksHeading = submission.isMock ? 'Product Links' : 'Evidence Links'
+
+  const linksHeading = submission.isMock ? t('detail.productLinks') : t('detail.evidenceLinks')
+  const chips = visibleLabels ? `<div class="chip-row">${visibleLabels}</div>` : ''
 
   elements.detailCard.className = 'detail-card'
   elements.detailCard.innerHTML = `
-    <div class="chip-row">${chips}</div>
+    ${chips}
     <div class="detail-identity">
       ${renderAgentAvatar(submission, 'agent-avatar agent-avatar-detail')}
       <div>
-        <h3 class="detail-title">${escapeHtml(submission.agentName)}</h3>
+        <h3 class="detail-title">${escapeHtml(getAgentName(submission))}</h3>
         <p class="detail-subtitle">
-          ${escapeHtml(submission.agentVersion)} · ${escapeHtml(submission.benchmarkVariant)} · run ${escapeHtml(submission.runId)}
+          ${escapeHtml(
+            t('detail.subtitle', {
+              version: getAgentVersion(submission),
+              variant: getBenchmarkVariant(submission),
+              runId: getRunId(submission)
+            })
+          )}
         </p>
       </div>
     </div>
 
-    <div class="detail-meta">Submitted ${escapeHtml(formatDateTime(submission.createdAt))}</div>
+    <div class="detail-meta">${escapeHtml(t('detail.submittedAt', { time: formatDateTime(submission.createdAt) }))}</div>
 
     <div class="detail-section">
-      <h3>Score Envelope</h3>
+      <h3>${escapeHtml(t('detail.scoreEnvelope'))}</h3>
       <div class="detail-grid">
         <div class="detail-item">
-          <strong>Total Score</strong>
-          ${escapeHtml(submission.totalScoreText)}
+          <strong>${escapeHtml(t('detail.totalScore'))}</strong>
+          ${escapeHtml(getTotalScoreText(submission))}
         </div>
         <div class="detail-item">
-          <strong>Pass Rate</strong>
-          ${escapeHtml(submission.passRateText)}
+          <strong>${escapeHtml(t('detail.passRate'))}</strong>
+          ${escapeHtml(getPassRateText(submission))}
         </div>
         <div class="detail-item">
-          <strong>Protocol Version</strong>
-          ${escapeHtml(submission.protocolVersion)}
+          <strong>${escapeHtml(t('detail.protocolVersion'))}</strong>
+          ${escapeHtml(getProtocolVersion(submission))}
         </div>
         <div class="detail-item">
-          <strong>Submission Ref</strong>
-          ${escapeHtml(submission.submissionRef || 'n/a')}
+          <strong>${escapeHtml(t('detail.submissionRef'))}</strong>
+          ${escapeHtml(getSubmissionRef(submission))}
         </div>
       </div>
     </div>
 
     <div class="detail-section">
       <h3>${escapeHtml(linksHeading)}</h3>
-      <div class="detail-links">${links || '<div class="detail-item">No public links provided.</div>'}</div>
+      <div class="detail-links">${links || `<div class="detail-item">${escapeHtml(t('detail.noPublicLinks'))}</div>`}</div>
     </div>
 
     ${notes}
@@ -496,16 +606,29 @@ function renderDetail() {
   `
 }
 
+function isMockMode() {
+  return state.dataMode === DATA_MODE.MOCK
+}
+
+function applyLocale(nextLocale) {
+  state.locale = i18n.setLocale(nextLocale)
+  applyStaticTranslations()
+  renderAgentPrompt()
+
+  if (!state.hasLoaded && state.submissions.length === 0) {
+    renderPendingSummary()
+    return
+  }
+
+  renderVariantFilter()
+  applyFilters()
+  updateSummary()
+  renderTable()
+  renderDetail()
+}
+
 async function loadLeaderboard() {
   elements.refreshButton.disabled = true
-  setTerminal([
-    '$ fetch validated submissions',
-    `repo=${REPO_OWNER}/${REPO_NAME}`,
-    `skill=main/SKILL.md`,
-    'submit=benchmark-submission.yml',
-    `labels=${ISSUE_LABEL}`,
-    'status=connecting'
-  ])
 
   try {
     const issues = await fetchIssues()
@@ -514,37 +637,22 @@ async function loadLeaderboard() {
     state.submissions = (filteredIssues.length > 0 ? filteredIssues.map(toSubmission) : MOCK_SUBMISSIONS).sort(
       compareSubmissions
     )
+
     renderVariantFilter()
     applyFilters()
     updateSummary()
     renderTable()
     renderDetail()
-
-    setTerminal([
-      '$ fetch validated submissions',
-      `repo=${REPO_OWNER}/${REPO_NAME}`,
-      `skill=main/SKILL.md`,
-      `issues_total=${issues.length}`,
-      `issues_rendered=${state.submissions.length}`,
-      `mode=${state.dataMode}`,
-      'status=ok'
-    ])
+    state.hasLoaded = true
   } catch (error) {
     console.error('[Leaderboard] failed to load submissions', error)
     state.dataMode = DATA_MODE.LIVE
     state.submissions = []
     state.filtered = []
+    state.hasLoaded = true
     updateSummary()
     renderTable()
     renderDetail()
-
-    setTerminal([
-      '$ fetch validated submissions',
-      `repo=${REPO_OWNER}/${REPO_NAME}`,
-      `skill=main/SKILL.md`,
-      `status=error`,
-      String(error instanceof Error ? error.message : error)
-    ])
   } finally {
     elements.refreshButton.disabled = false
   }
@@ -566,5 +674,13 @@ elements.variantFilter.addEventListener('change', event => {
   renderDetail()
 })
 
+elements.localeButtons.forEach(button => {
+  button.addEventListener('click', () => {
+    applyLocale(button.dataset.localeButton)
+  })
+})
+
+applyStaticTranslations()
 renderAgentPrompt()
+renderPendingSummary()
 void loadLeaderboard()

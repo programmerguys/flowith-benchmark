@@ -87,12 +87,52 @@ select {
   text-transform: uppercase;
 }
 
+.site-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
 .site-links,
-.hero-actions,
 .hero-chip-row {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
+}
+
+.locale-switcher {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(10, 20, 14, 0.96);
+}
+
+.locale-button {
+  min-width: 62px;
+  min-height: 36px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  transition:
+    background 160ms ease,
+    color 160ms ease;
+}
+
+.locale-button:hover {
+  color: var(--text);
+}
+
+.locale-button.is-active {
+  background: rgba(125, 248, 166, 0.14);
+  color: var(--text);
 }
 
 .project-badge {
@@ -145,59 +185,15 @@ select {
   color: var(--muted);
 }
 
-.project-badge-tag {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 48px;
-  padding: 4px 8px;
-  border-radius: 999px;
-  background: rgba(255, 190, 115, 0.12);
-  border: 1px solid rgba(255, 190, 115, 0.24);
-  color: #ffd59d;
-  font-size: 11px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.button-link {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 44px;
-  padding: 0 16px;
-  border-radius: 999px;
-  border: 1px solid var(--line-strong);
-  background: rgba(14, 26, 18, 0.92);
-  color: var(--text);
-  text-decoration: none;
-  transition:
-    background 160ms ease,
-    border-color 160ms ease,
-    transform 160ms ease;
-}
-
-.button-link:hover {
-  background: rgba(24, 43, 30, 0.96);
-  border-color: rgba(125, 248, 166, 0.24);
-  transform: translateY(-1px);
-}
-
-.button-link-primary {
-  background: linear-gradient(135deg, rgba(18, 46, 29, 0.98), rgba(24, 67, 41, 0.98));
-  border-color: rgba(125, 248, 166, 0.24);
-}
-
 .hero {
   display: grid;
-  grid-template-columns: minmax(0, 1.15fr) minmax(360px, 0.95fr);
+  grid-template-columns: minmax(0, 0.96fr) minmax(400px, 1.04fr);
   gap: 22px;
   align-items: stretch;
   margin-bottom: 22px;
 }
 
 .hero-copy,
-.hero-command,
 .panel {
   backdrop-filter: blur(18px);
   background:
@@ -210,13 +206,9 @@ select {
 
 .hero-copy {
   padding: 32px;
-}
-
-.hero-command {
-  padding: 24px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  justify-content: space-between;
 }
 
 .eyebrow,
@@ -225,8 +217,7 @@ select {
 .meta-strip,
 .detail-meta,
 .chip,
-.filter-control span,
-.terminal-content {
+.filter-control span {
   letter-spacing: 0.06em;
   text-transform: uppercase;
 }
@@ -252,11 +243,14 @@ select {
   color: var(--accent);
 }
 
-.hero-text {
-  max-width: 48ch;
-  margin: 18px 0 0;
-  line-height: 1.7;
-  color: var(--muted);
+.hero-prompt {
+  margin-top: 22px;
+  padding: 20px;
+  border-radius: 22px;
+  border: 1px solid rgba(125, 248, 166, 0.14);
+  background:
+    linear-gradient(180deg, rgba(125, 248, 166, 0.05), transparent 42%),
+    rgba(4, 11, 8, 0.88);
 }
 
 .ecosystem-strip {
@@ -311,10 +305,6 @@ select {
   margin-top: 22px;
 }
 
-.hero-actions {
-  margin-top: 26px;
-}
-
 .command-top {
   display: flex;
   justify-content: space-between;
@@ -346,43 +336,9 @@ select {
   color: var(--muted);
 }
 
-.hero-terminal {
-  overflow: hidden;
-  background:
-    linear-gradient(180deg, rgba(5, 14, 9, 0.98), rgba(3, 10, 7, 0.98)),
-    #060b08;
-  border: 1px solid rgba(118, 235, 152, 0.18);
-  border-radius: 20px;
-  color: #c9ffd6;
-  margin-top: auto;
-}
-
-.terminal-bar {
-  display: flex;
-  gap: 8px;
-  padding: 16px 18px;
-  border-bottom: 1px solid rgba(118, 235, 152, 0.14);
-}
-
-.terminal-bar span {
-  width: 10px;
-  height: 10px;
-  border-radius: 999px;
-  background: rgba(194, 255, 210, 0.28);
-}
-
-.terminal-content {
-  margin: 0;
-  padding: 22px 18px 26px;
-  font-size: 12px;
-  line-height: 1.7;
-  white-space: pre-wrap;
-  word-break: break-word;
-}
-
 .layout {
   display: grid;
-  grid-template-columns: minmax(0, 1.5fr) minmax(320px, 0.85fr);
+  grid-template-columns: minmax(320px, 0.78fr) minmax(0, 1.22fr);
   gap: 22px;
 }
 
@@ -390,14 +346,8 @@ select {
   padding: 24px;
 }
 
-.panel-summary,
-.panel-table {
-  grid-column: 1 / 2;
-}
-
 .panel-detail {
   grid-column: 2 / 3;
-  grid-row: 1 / span 2;
   background: var(--panel-strong);
 }
 
@@ -412,6 +362,13 @@ select {
 .panel-header h2 {
   margin: 4px 0 0;
   font-size: 24px;
+}
+
+.panel-controls {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+  flex-wrap: wrap;
 }
 
 .action-button,
@@ -480,6 +437,39 @@ select {
   border-radius: 18px;
   border: 1px solid var(--line);
   background: rgba(6, 14, 9, 0.78);
+}
+
+.hero-leaderboard .table-shell {
+  max-height: 520px;
+}
+
+.hero-leaderboard .leaderboard-table {
+  min-width: 0;
+}
+
+.hero-leaderboard .leaderboard-table th,
+.hero-leaderboard .leaderboard-table td {
+  padding: 12px 10px;
+}
+
+.hero-leaderboard .leaderboard-table th:nth-child(6),
+.hero-leaderboard .leaderboard-table th:nth-child(7),
+.hero-leaderboard .leaderboard-table td:nth-child(6),
+.hero-leaderboard .leaderboard-table td:nth-child(7) {
+  display: none;
+}
+
+.hero-leaderboard .agent-cell {
+  gap: 10px;
+}
+
+.hero-leaderboard .agent-avatar {
+  width: 34px;
+  height: 34px;
+}
+
+.hero-leaderboard .score-main {
+  font-size: 18px;
 }
 
 .leaderboard-table {
@@ -716,7 +706,6 @@ select {
   }
 
   .panel-summary,
-  .panel-table,
   .panel-detail {
     grid-column: auto;
     grid-row: auto;
@@ -730,13 +719,11 @@ select {
   }
 
   .hero-copy,
-  .hero-command,
   .panel {
     border-radius: 20px;
   }
 
   .hero-copy,
-  .hero-command,
   .panel {
     padding: 18px;
   }
@@ -751,23 +738,23 @@ select {
     flex-direction: column;
   }
 
+  .site-controls,
   .site-links,
-  .hero-actions {
+  .panel-controls {
     width: 100%;
   }
 
+  .locale-switcher,
   .project-badge,
-  .site-links .button-link,
-  .hero-actions .button-link,
-  .filter-control {
+  .filter-control,
+  .panel-controls .action-button {
     width: 100%;
   }
 
+  .locale-button,
   .filter-control select,
   .action-button,
-  .project-badge,
-  .site-links .button-link,
-  .hero-actions .button-link {
+  .project-badge {
     width: 100%;
   }
 }
