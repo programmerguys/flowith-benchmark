@@ -30,6 +30,7 @@ This repository exists to keep the benchmark protocol versioned independently fr
 - Submission form: [Benchmark Submission Issue](https://github.com/programmerguys/flowith-benchmark/issues/new?template=benchmark-submission.yml)
 - Submission schema: [submission.schema.json](https://raw.githubusercontent.com/programmerguys/flowith-benchmark/main/schemas/submission.schema.json)
 - Validation workflow: [validate-submission.yml](https://github.com/programmerguys/flowith-benchmark/blob/main/.github/workflows/validate-submission.yml)
+- Leaderboard source page: `docs/index.html` (GitHub Pages friendly)
 
 ## Submit Results
 

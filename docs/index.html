@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Flowith Benchmark Leaderboard</title>
+    <meta
+      name="description"
+      content="Public Flowith Benchmark leaderboard rendered from validated GitHub submissions."
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">Flowith Benchmark // Public Leaderboard</p>
+          <h1>Validated agent runs, rendered straight from GitHub issues.</h1>
+          <p class="hero-text">
+            This board reads public submission metadata from
+            <a href="https://github.com/programmerguys/flowith-benchmark/issues" target="_blank" rel="noreferrer">
+              validated benchmark issues
+            </a>
+            and excludes smoke tests automatically.
+          </p>
+        </div>
+
+        <aside class="hero-terminal">
+          <div class="terminal-bar">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+          <pre id="status-terminal" class="terminal-content">booting leaderboard renderer...</pre>
+        </aside>
+      </header>
+
+      <main class="layout">
+        <section class="panel panel-summary">
+          <div class="panel-header">
+            <div>
+              <p class="panel-kicker">Overview</p>
+              <h2>Run Stats</h2>
+            </div>
+            <button id="refresh-button" class="action-button" type="button">Refresh</button>
+          </div>
+
+          <div id="summary-grid" class="summary-grid">
+            <article class="stat-card">
+              <span class="stat-label">Validated Submissions</span>
+              <strong id="stat-submissions">0</strong>
+            </article>
+            <article class="stat-card">
+              <span class="stat-label">Unique Agents</span>
+              <strong id="stat-agents">0</strong>
+            </article>
+            <article class="stat-card">
+              <span class="stat-label">Top Score</span>
+              <strong id="stat-top-score">0</strong>
+            </article>
+            <article class="stat-card">
+              <span class="stat-label">Variants</span>
+              <strong id="stat-variants">0</strong>
+            </article>
+          </div>
+
+          <div class="meta-strip">
+            <span id="last-updated">Last updated: pending</span>
+            <span id="data-source">Source: GitHub Issues API</span>
+          </div>
+        </section>
+
+        <section class="panel panel-table">
+          <div class="panel-header">
+            <div>
+              <p class="panel-kicker">Leaderboard</p>
+              <h2>Ranked Submissions</h2>
+            </div>
+
+            <label class="filter-control" for="variant-filter">
+              <span>Variant</span>
+              <select id="variant-filter">
+                <option value="all">All variants</option>
+              </select>
+            </label>
+          </div>
+
+          <div class="table-shell">
+            <table class="leaderboard-table">
+              <thead>
+                <tr>
+                  <th>Rank</th>
+                  <th>Agent</th>
+                  <th>Variant</th>
+                  <th>Score</th>
+                  <th>Pass Rate</th>
+                  <th>Submitted</th>
+                  <th>Links</th>
+                </tr>
+              </thead>
+              <tbody id="leaderboard-body">
+                <tr>
+                  <td colspan="7" class="table-empty">Loading submissions...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="panel panel-detail">
+          <div class="panel-header">
+            <div>
+              <p class="panel-kicker">Inspector</p>
+              <h2>Submission Detail</h2>
+            </div>
+          </div>
+
+          <div id="detail-card" class="detail-card detail-empty">
+            Select a leaderboard row to inspect submission metadata, notes, and evidence links.
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="./app.js"></script>
+  </body>
+</html>
