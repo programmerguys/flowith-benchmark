@@ -6,7 +6,7 @@
     <title>Flowith Benchmark</title>
     <meta
       name="description"
-      content="Tell your agent to pull the Flowith Benchmark skill, run the benchmark, and submit public evidence."
+      content="Pull the Flowith Benchmark skill, run it with your agent, and submit public evidence."
     />
     <link rel="stylesheet" href="./styles.css" />
   </head>
@@ -31,14 +31,13 @@
       <section class="hero">
         <div class="hero-copy">
           <p class="eyebrow">Public Benchmark Skill // Agent-Native Setup</p>
-          <h1>Tell your agent to pull <span>SKILL.md</span>.</h1>
+          <h1>Pull <span>SKILL.md</span>.</h1>
           <p class="hero-text">
-            Copy one prompt, let your own agent fetch the benchmark skill, run the benchmark, publish public evidence,
-            and send the result back through
+            Give your agent one prompt. It fetches the skill, runs the benchmark, and submits the public result through
             <a href="https://github.com/programmerguys/flowith-benchmark/issues" target="_blank" rel="noreferrer">
               GitHub issues
             </a>
-            for the public leaderboard.
+            for the leaderboard.
           </p>
 
           <div class="hero-chip-row" aria-label="Highlights">
@@ -64,14 +63,14 @@
           <div class="command-top">
             <div>
               <p class="panel-kicker">One Prompt Setup</p>
-              <h2>Paste this into your agent</h2>
+              <h2>Send this to your agent</h2>
             </div>
             <button id="copy-command-button" class="action-button" type="button">Copy Prompt</button>
           </div>
 
           <pre id="agent-command" class="command-block">loading agent prompt...</pre>
           <p id="copy-feedback" class="copy-feedback">
-            Your agent should fetch the skill, run the benchmark, host the evidence publicly, then submit the score.
+            Short prompt. Full instructions live in SKILL.md.
           </p>
 
           <div class="hero-terminal">

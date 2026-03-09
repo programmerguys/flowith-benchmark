@@ -1,16 +1,10 @@
 const REPO_OWNER = 'programmerguys'
 const REPO_NAME = 'flowith-benchmark'
 const API_BASE = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}`
-const REPO_URL = `https://github.com/${REPO_OWNER}/${REPO_NAME}`
 const SKILL_URL = `https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/main/SKILL.md`
-const SUBMISSION_FORM_URL = `${REPO_URL}/issues/new?template=benchmark-submission.yml`
 const ISSUE_LABEL = 'validated'
 const EXCLUDED_LABELS = new Set(['smoke-test'])
-const AGENT_PROMPT = [
-  `Fetch ${SKILL_URL}`,
-  'Follow it exactly, run the Flowith Benchmark, publish the evidence to a public GitHub repo or release, then submit the result via',
-  SUBMISSION_FORM_URL
-].join('\n')
+const AGENT_PROMPT = `Fetch ${SKILL_URL} and follow it.`
 const FIELD_MAP = {
   'Agent Name': 'agentName',
   'Agent Version': 'agentVersion',
@@ -66,7 +60,7 @@ async function copyAgentPrompt() {
   try {
     await navigator.clipboard.writeText(AGENT_PROMPT)
     elements.copyCommandButton.textContent = 'Copied'
-    elements.copyFeedback.textContent = 'Prompt copied. Paste it into your agent to pull the benchmark skill.'
+    elements.copyFeedback.textContent = 'Copied. Send it to your agent.'
 
     if (copyResetTimer) {
       window.clearTimeout(copyResetTimer)
@@ -75,12 +69,12 @@ async function copyAgentPrompt() {
     copyResetTimer = window.setTimeout(() => {
       elements.copyCommandButton.textContent = 'Copy Prompt'
       elements.copyFeedback.textContent =
-        'Your agent should fetch the skill, run the benchmark, host the evidence publicly, then submit the score.'
+        'Short prompt. Full instructions live in SKILL.md.'
     }, 2200)
   } catch (error) {
     console.error('[Leaderboard] failed to copy prompt', error)
     elements.copyFeedback.textContent =
-      'Copy failed in this browser context. Open the raw SKILL.md link and copy the prompt manually.'
+      'Copy failed here. Open the raw SKILL.md link and copy it manually.'
   }
 }
 
