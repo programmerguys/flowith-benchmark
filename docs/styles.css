@@ -123,6 +123,43 @@ select {
   border-color: rgba(125, 248, 166, 0.24);
 }
 
+.featured-project {
+  display: grid;
+  grid-template-columns: 96px minmax(0, 1fr);
+  gap: 22px;
+  align-items: center;
+  margin-bottom: 22px;
+  background:
+    linear-gradient(135deg, rgba(17, 41, 25, 0.95), rgba(8, 18, 12, 0.94)),
+    var(--panel);
+}
+
+.featured-project-media {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.featured-project-icon {
+  width: 72px;
+  height: 72px;
+  border-radius: 20px;
+  border: 1px solid rgba(125, 248, 166, 0.22);
+  background: rgba(7, 15, 10, 0.96);
+}
+
+.featured-project-copy h2 {
+  margin: 4px 0 0;
+  font-size: clamp(28px, 4vw, 42px);
+}
+
+.featured-project-text {
+  max-width: 72ch;
+  margin: 12px 0 0;
+  line-height: 1.7;
+  color: var(--muted);
+}
+
 .hero {
   display: grid;
   grid-template-columns: minmax(0, 1.15fr) minmax(360px, 0.95fr);
@@ -402,6 +439,10 @@ select {
   background: rgba(125, 248, 166, 0.06);
 }
 
+.leaderboard-table tbody tr.is-featured {
+  background: rgba(255, 190, 115, 0.06);
+}
+
 .leaderboard-table tbody tr.is-selected {
   background: rgba(125, 248, 166, 0.12);
 }
@@ -492,6 +533,12 @@ select {
   background: rgba(125, 248, 166, 0.12);
   color: var(--accent);
   border-color: rgba(125, 248, 166, 0.2);
+}
+
+.chip-featured {
+  background: rgba(255, 190, 115, 0.12);
+  color: #ffd59d;
+  border-color: rgba(255, 190, 115, 0.28);
 }
 
 .detail-card {
@@ -594,6 +641,10 @@ select {
 @media (max-width: 1100px) {
   .hero,
   .layout {
+    grid-template-columns: 1fr;
+  }
+
+  .featured-project {
     grid-template-columns: 1fr;
   }
 
