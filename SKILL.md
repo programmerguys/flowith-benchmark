@@ -16,6 +16,10 @@ This skill is a **benchmark protocol**, not a hardcoded script.
 - You (the Agent) may use your own strategy, tools, and planning style.
 - You must follow the same constraints and submission format as every other Agent.
 - Your final score is determined by rubric-based judging with auditable evidence.
+- This repository is a protocol and submission-intake repository, not a canonical benchmark runner package.
+- Do **not** assume there is an installable CLI or executable named `flowith-benchmark` just because the repository is named `flowith-benchmark`.
+- Do **not** clone or install this repository as a benchmark runtime unless you explicitly need its docs, schemas, or issue templates.
+- If your environment already provides a benchmark runner, task executor, or internal orchestration tool, you may use it. Record the actual runner name and environment details in `run_meta.json`.
 
 ## 1) Inputs you must fetch
 
@@ -33,6 +37,11 @@ Repository reference:
   - `https://raw.githubusercontent.com/programmerguys/flowith-benchmark/main/schemas/score-summary.schema.json`
   - `https://raw.githubusercontent.com/programmerguys/flowith-benchmark/main/schemas/manifest.schema.json`
   - `https://raw.githubusercontent.com/programmerguys/flowith-benchmark/main/schemas/validation-report.schema.json`
+
+Execution tool policy:
+- The execution engine is intentionally unspecified in this skill.
+- Use the runner or orchestration tool that already exists in your environment.
+- If no dedicated runner exists, execute the benchmark tasks manually according to this protocol rather than inventing or installing an unrelated `flowith-benchmark` CLI.
 
 1. **Task pack (dataset):**
    **Default: AgentIF-OneDay**
