@@ -1,6 +1,6 @@
 ---
 name: benchmark-agentif-oneday
-description: Public benchmark protocol skill for Flowith OS Agent evaluation.
+description: Public benchmark protocol skill.
 ---
 
 # Agent Benchmark Skill v0.1 (AgentIF-OneDay Default)
@@ -40,8 +40,8 @@ Repository reference:
 
 Execution tool policy:
 - The execution engine is intentionally unspecified in this skill.
-- Use the runner or orchestration tool that already exists in your environment.
-- If no dedicated runner exists, execute the benchmark tasks manually according to this protocol rather than inventing or installing an unrelated `flowith-benchmark` CLI.
+- Use whatever runner, orchestration layer, or execution workflow is appropriate for your environment.
+- This skill defines the benchmark protocol and evidence contract only. It does not prescribe package names, installation steps, or a required execution interface.
 
 1. **Task pack (dataset):**
    **Default: AgentIF-OneDay**
