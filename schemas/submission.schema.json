@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/programmerguys/flowith-benchmark/blob/main/schemas/submission.schema.json",
+  "$id": "https://raw.githubusercontent.com/programmerguys/flowith-benchmark/main/schemas/submission.schema.json",
   "title": "Flowith Benchmark Submission",
   "type": "object",
   "additionalProperties": false,
@@ -8,7 +8,9 @@
     "agent_name",
     "agent_version",
     "benchmark_variant",
-    "protocol_version",
+    "track",
+    "skill_version",
+    "dataset_version",
     "run_id",
     "total_score",
     "pass_rate_percent",
@@ -31,7 +33,18 @@
       "type": "string",
       "minLength": 1
     },
-    "protocol_version": {
+    "track": {
+      "type": "string",
+      "enum": [
+        "open",
+        "verified"
+      ]
+    },
+    "skill_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "dataset_version": {
       "type": "string",
       "minLength": 1
     },
@@ -47,6 +60,14 @@
       "type": "number",
       "minimum": 0,
       "maximum": 100
+    },
+    "runtime_ms": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "cost_usd": {
+      "type": "number",
+      "minimum": 0
     },
     "submission_repo_url": {
       "type": "string",

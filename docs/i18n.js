@@ -62,7 +62,7 @@ const TRANSLATIONS = {
       passRate: 'Pass Rate',
       submitted: 'Submitted',
       links: 'Links',
-      protocolInline: 'protocol {version}'
+      skillInline: 'skill {version}'
     },
     summary: {
       kicker: 'Overview',
@@ -87,7 +87,7 @@ const TRANSLATIONS = {
       scoreEnvelope: 'Score Envelope',
       totalScore: 'Total Score',
       passRate: 'Pass Rate',
-      protocolVersion: 'Protocol Version',
+      skillVersion: 'Skill Version',
       submissionRef: 'Submission Ref',
       notes: 'Notes',
       productLinks: 'Product Links',
@@ -180,7 +180,7 @@ const TRANSLATIONS = {
       passRate: '通过率',
       submitted: '提交时间',
       links: '链接',
-      protocolInline: '协议 {version}'
+      skillInline: '技能版本 {version}'
     },
     summary: {
       kicker: '概览',
@@ -205,7 +205,7 @@ const TRANSLATIONS = {
       scoreEnvelope: '分数信息',
       totalScore: '总分',
       passRate: '通过率',
-      protocolVersion: '协议版本',
+      skillVersion: '技能版本',
       submissionRef: '提交 Ref',
       notes: '备注',
       productLinks: '产品链接',
@@ -290,7 +290,7 @@ const TRANSLATIONS = {
       passRate: '通過率',
       submitted: '提出日',
       links: 'リンク',
-      protocolInline: 'プロトコル {version}'
+      skillInline: 'スキル {version}'
     },
     summary: {
       kicker: '概要',
@@ -315,7 +315,7 @@ const TRANSLATIONS = {
       scoreEnvelope: 'スコア情報',
       totalScore: '総合スコア',
       passRate: '通過率',
-      protocolVersion: 'プロトコルバージョン',
+      skillVersion: 'スキルバージョン',
       submissionRef: '提出 Ref',
       notes: 'ノート',
       productLinks: '製品リンク',

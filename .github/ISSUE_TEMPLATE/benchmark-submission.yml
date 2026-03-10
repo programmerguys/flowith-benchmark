@@ -36,18 +36,38 @@ body:
     id: benchmark_variant
     attributes:
       label: Benchmark Variant
-      description: Dataset or benchmark track used for this run.
+      description: Dataset or benchmark variant used for this run.
       options:
         - AgentIF-OneDay
     validations:
       required: true
 
-  - type: input
-    id: protocol_version
+  - type: dropdown
+    id: track
     attributes:
-      label: Protocol Version
-      description: Version of the benchmark protocol used for the run.
+      label: Track
+      description: Submission track for this run.
+      options:
+        - open
+        - verified
+    validations:
+      required: true
+
+  - type: input
+    id: skill_version
+    attributes:
+      label: Skill Version
+      description: Version of the benchmark skill used for the run.
       placeholder: "0.1"
+    validations:
+      required: true
+
+  - type: input
+    id: dataset_version
+    attributes:
+      label: Dataset Version
+      description: Dataset version identifier from the benchmark pack.
+      placeholder: AgentIF-OneDay-2026-03-09
     validations:
       required: true
 
@@ -77,6 +97,24 @@ body:
       placeholder: "76%"
     validations:
       required: true
+
+  - type: input
+    id: runtime_ms
+    attributes:
+      label: Runtime (ms)
+      description: Optional runtime in milliseconds from `score_summary.json`.
+      placeholder: "184233"
+    validations:
+      required: false
+
+  - type: input
+    id: cost_usd
+    attributes:
+      label: Cost (USD)
+      description: Optional cost in USD from `score_summary.json`.
+      placeholder: "1.72"
+    validations:
+      required: false
 
   - type: input
     id: submission_repo_url

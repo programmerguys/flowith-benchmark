@@ -1,0 +1,80 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/programmerguys/flowith-benchmark/main/schemas/score-detail.schema.json",
+  "title": "Flowith Benchmark Score Detail",
+  "type": "object",
+  "required": [
+    "run_id",
+    "task_scores"
+  ],
+  "properties": {
+    "run_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "task_scores": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "task_id",
+          "task_score",
+          "criteria"
+        ],
+        "properties": {
+          "task_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "task_score": {
+            "type": "number",
+            "minimum": 0
+          },
+          "criteria": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "criterion_id",
+                "satisfied",
+                "score_awarded",
+                "reasoning",
+                "evidence_refs",
+                "confidence"
+              ],
+              "properties": {
+                "criterion_id": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "satisfied": {
+                  "type": "boolean"
+                },
+                "score_awarded": {
+                  "type": "number",
+                  "minimum": 0
+                },
+                "reasoning": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "evidence_refs": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "confidence": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

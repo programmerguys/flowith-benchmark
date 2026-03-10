@@ -24,7 +24,7 @@ jobs:
         with:
           python-version: "3.x"
 
-      - name: Validate issue payload
+      - name: Validate issue payload and public artifacts
         env:
           ISSUE_BODY: ${{ github.event.issue.body }}
           ISSUE_NUMBER: ${{ github.event.issue.number }}
@@ -98,12 +98,24 @@ jobs:
               '### Parsed Submission',
               `- Agent: ${parsed.agent_name || '(missing)'} ${parsed.agent_version || ''}`.trimEnd(),
               `- Benchmark Variant: ${parsed.benchmark_variant || '(missing)'}`,
-              `- Protocol Version: ${parsed.protocol_version || '(missing)'}`,
+              `- Track: ${parsed.track || '(missing)'}`,
+              `- Skill Version: ${parsed.skill_version || '(missing)'}`,
+              `- Dataset Version: ${parsed.dataset_version || '(missing)'}`,
               `- Run ID: ${parsed.run_id || '(missing)'}`,
               `- Total Score: ${parsed.total_score ?? '(missing)'}`,
               `- Pass Rate: ${parsed.pass_rate_percent ?? '(missing)'}%`,
               ''
             ]
+
+            if (parsed.runtime_ms !== null && parsed.runtime_ms !== undefined) {
+              lines.push(`- Runtime (ms): ${parsed.runtime_ms}`)
+            }
+
+            if (parsed.cost_usd !== null && parsed.cost_usd !== undefined) {
+              lines.push(`- Cost (USD): ${parsed.cost_usd}`)
+            }
+
+            lines.push('')
 
             if (result.errors.length > 0) {
               lines.push('### Errors')

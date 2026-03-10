@@ -23,7 +23,7 @@ const FIELD_MAP = {
   'Agent Name': 'agentName',
   'Agent Version': 'agentVersion',
   'Benchmark Variant': 'benchmarkVariant',
-  'Protocol Version': 'protocolVersion',
+  'Skill Version': 'skillVersion',
   'Run ID': 'runId',
   'Total Score': 'totalScoreRaw',
   'Pass Rate': 'passRateRaw',
@@ -163,8 +163,8 @@ function getBenchmarkVariant(submission) {
   return submission.benchmarkVariant || t('common.unknownVariant')
 }
 
-function getProtocolVersion(submission) {
-  return submission.protocolVersion || t('common.unknown')
+function getSkillVersion(submission) {
+  return submission.skillVersion || t('common.unknown')
 }
 
 function getRunId(submission) {
@@ -365,7 +365,7 @@ function toSubmission(issue) {
     agentName: parsed.agentName || '',
     agentVersion: parsed.agentVersion || '',
     benchmarkVariant: parsed.benchmarkVariant || '',
-    protocolVersion: parsed.protocolVersion || '',
+    skillVersion: parsed.skillVersion || '',
     runId: parsed.runId || `issue-${issue.number}`,
     totalScore,
     totalScoreText: parsed.totalScoreRaw || '',
@@ -382,7 +382,7 @@ function toSubmission(issue) {
       parsed.agentName,
       parsed.agentVersion,
       parsed.benchmarkVariant,
-      parsed.protocolVersion,
+      parsed.skillVersion,
       parsed.runId
     ]
       .join(' ')
@@ -571,7 +571,7 @@ function renderTable() {
         </td>
         <td>
           <span class="score-main">${escapeHtml(getTotalScoreText(submission))}</span>
-          <span class="score-sub">${escapeHtml(t('leaderboard.protocolInline', { version: getProtocolVersion(submission) }))}</span>
+          <span class="score-sub">${escapeHtml(t('leaderboard.skillInline', { version: getSkillVersion(submission) }))}</span>
         </td>
         <td>${escapeHtml(getPassRateText(submission))}</td>
         <td>${escapeHtml(formatDate(submission.createdAt))}</td>
@@ -671,8 +671,8 @@ function renderDetail() {
           ${escapeHtml(getPassRateText(submission))}
         </div>
         <div class="detail-item">
-          <strong>${escapeHtml(t('detail.protocolVersion'))}</strong>
-          ${escapeHtml(getProtocolVersion(submission))}
+          <strong>${escapeHtml(t('detail.skillVersion'))}</strong>
+          ${escapeHtml(getSkillVersion(submission))}
         </div>
         <div class="detail-item">
           <strong>${escapeHtml(t('detail.submissionRef'))}</strong>

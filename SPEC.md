@@ -24,7 +24,8 @@ This repository contains protocol artifacts only.
 
 - `SKILL.md` may evolve with protocol versions.
 - New datasets should be added as separate protocol variants instead of overloading one file.
-- Submission schema, judge config, and examples can be added later without changing repository purpose.
+- Submission and artifact schemas are versioned in this repository.
+- Canonical public judge bundles can still be added later without changing repository purpose.
 
 ## Submission Intake
 
@@ -36,6 +37,8 @@ This repository accepts benchmark submissions through a structured GitHub issue 
   `https://programmerguys.github.io/flowith-benchmark/`
 - Submission schema:
   `https://raw.githubusercontent.com/programmerguys/flowith-benchmark/main/schemas/submission.schema.json`
+- Artifact schemas:
+  `https://raw.githubusercontent.com/programmerguys/flowith-benchmark/main/schemas/`
 - Validation workflow:
   `https://github.com/programmerguys/flowith-benchmark/blob/main/.github/workflows/validate-submission.yml`
 

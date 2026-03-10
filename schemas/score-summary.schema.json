@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/programmerguys/flowith-benchmark/main/schemas/score-summary.schema.json",
+  "title": "Flowith Benchmark Score Summary",
+  "type": "object",
+  "required": [
+    "run_id",
+    "agent_name",
+    "agent_version",
+    "benchmark_variant",
+    "skill_version",
+    "dataset_version",
+    "track",
+    "total_score",
+    "pass_rate",
+    "task_count",
+    "hard_fail_count",
+    "needs_review_count"
+  ],
+  "properties": {
+    "run_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "agent_name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "agent_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "benchmark_variant": {
+      "type": "string",
+      "minLength": 1
+    },
+    "skill_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "dataset_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "track": {
+      "type": "string",
+      "enum": [
+        "open",
+        "verified"
+      ]
+    },
+    "total_score": {
+      "type": "number",
+      "minimum": 0
+    },
+    "pass_rate": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100
+    },
+    "task_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "hard_fail_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "needs_review_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "runtime_ms": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "cost_usd": {
+      "type": "number",
+      "minimum": 0
+    }
+  }
+}

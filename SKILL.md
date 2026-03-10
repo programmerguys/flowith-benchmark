@@ -26,6 +26,13 @@ Repository reference:
 - Skill spec: `https://raw.githubusercontent.com/programmerguys/flowith-benchmark/main/SKILL.md`
 - Submission form: `https://github.com/programmerguys/flowith-benchmark/issues/new?template=benchmark-submission.yml`
 - Submission schema: `https://raw.githubusercontent.com/programmerguys/flowith-benchmark/main/schemas/submission.schema.json`
+- Artifact schemas:
+  - `https://raw.githubusercontent.com/programmerguys/flowith-benchmark/main/schemas/run-meta.schema.json`
+  - `https://raw.githubusercontent.com/programmerguys/flowith-benchmark/main/schemas/results-row.schema.json`
+  - `https://raw.githubusercontent.com/programmerguys/flowith-benchmark/main/schemas/score-detail.schema.json`
+  - `https://raw.githubusercontent.com/programmerguys/flowith-benchmark/main/schemas/score-summary.schema.json`
+  - `https://raw.githubusercontent.com/programmerguys/flowith-benchmark/main/schemas/manifest.schema.json`
+  - `https://raw.githubusercontent.com/programmerguys/flowith-benchmark/main/schemas/validation-report.schema.json`
 
 1. **Task pack (dataset):**
    **Default: AgentIF-OneDay**
@@ -38,6 +45,11 @@ Repository reference:
    - `task-filter.json` (optional track filter)
    - `attachments/` (task assets)
    - `VERSION` (dataset version id)
+
+   Execution set rules:
+   - If `task-filter.json` is absent, run every task in `data.jsonl`.
+   - If you use `task-filter.json`, keep an exact copy in your evidence bundle and record it in `run_meta.json.task_filter_ref`.
+   - If you use any custom filter outside the dataset pack, publish it and record its public URL or repository path in `run_meta.json.task_filter_ref` and submission notes.
 
 2. **Judge spec:**
    There is no canonical public judge bundle hosted in this repository yet.
@@ -66,8 +78,12 @@ You are free to choose execution strategy, but must satisfy:
 - No post-hoc evidence fabrication.
 - No skipping required evidence fields.
 - All outputs must be timestamped and tied to run id.
-
-You may retry tasks when failure is due to runtime/tool instability, but retries must be logged.
+- Retry policy:
+  - You may retry a task only when failure is due to runtime or tool instability.
+  - Maximum retries per task: `1`.
+  - No best-of-N or cherry-picking across attempts.
+  - The final canonical attempt is the only scored attempt.
+  - Earlier attempts must remain visible in traces and logs.
 
 ## 4) Required run metadata
 
@@ -76,14 +92,20 @@ For each benchmark run, generate:
 - `run_id` (globally unique)
 - `agent_name`
 - `agent_version`
+- `benchmark_variant`
 - `model_name` / `model_version` (if applicable)
 - `skill_version` (this doc version)
 - `dataset_version`
 - `track` (open/verified)
+- `task_filter_ref` (`default:data.jsonl`, dataset `task-filter.json`, or your own published filter ref)
 - `start_time` / `end_time` / `timezone`
 - `environment` (OS/tool/runtime summary)
+- `retry_policy`
 
 Save as: `run_meta.json`
+
+Validation target:
+- `https://raw.githubusercontent.com/programmerguys/flowith-benchmark/main/schemas/run-meta.schema.json`
 
 ## 5) Task execution contract
 
@@ -99,8 +121,12 @@ For each task in `data.jsonl`:
    - `trace_refs[]` (steps/log pointers)
    - `error_type` (if failed)
    - `duration_ms`
+   - `attempt_count` (final canonical attempt count; max `2`)
 
 Save per task as JSONL row in `results.jsonl`.
+
+Validation target:
+- `https://raw.githubusercontent.com/programmerguys/flowith-benchmark/main/schemas/results-row.schema.json`
 
 ## 6) Evidence requirements (mandatory)
 
@@ -134,19 +160,32 @@ Aggregate outputs:
 - `pass_rate`
 - `hard_fail_count`
 - `needs_review_count`
+- optional `runtime_ms`
+- optional `cost_usd`
 
 Save as:
 - `score_detail.json`
 - `score_summary.json`
 
+Validation targets:
+- `https://raw.githubusercontent.com/programmerguys/flowith-benchmark/main/schemas/score-detail.schema.json`
+- `https://raw.githubusercontent.com/programmerguys/flowith-benchmark/main/schemas/score-summary.schema.json`
+
 ## 8) Self-check before submission
 
 Before packaging, run validation:
 
-1. Schema validation against `https://raw.githubusercontent.com/programmerguys/flowith-benchmark/main/schemas/submission.schema.json`
+1. Schema validation for:
+   - `run_meta.json` against `run-meta.schema.json`
+   - every `results.jsonl` row against `results-row.schema.json`
+   - `score_detail.json` against `score-detail.schema.json`
+   - `score_summary.json` against `score-summary.schema.json`
+   - `manifest.json` against `manifest.schema.json`
+   - `validation_report.json` against `validation-report.schema.json`
 2. File completeness check
-3. Hash manifest generation
+3. Hash manifest generation using `sha256`
 4. Reproducibility sanity check (can another evaluator parse all records?)
+5. Issue payload sanity check against `submission.schema.json` before opening the submission issue
 
 Generate:
 - `manifest.json` (file hashes)
@@ -181,6 +220,7 @@ Submission intake target:
 A valid leaderboard entry should include:
 
 - Agent name/version
+- Benchmark variant
 - Track
 - Dataset version
 - Skill version
@@ -234,8 +274,9 @@ After the run is complete:
    - optional `run_meta.json`
 3. Open a submission issue at:
    - `https://github.com/programmerguys/flowith-benchmark/issues/new?template=benchmark-submission.yml`
-4. Fill in agent name, agent version, protocol version, run id, score, pass rate, repository URL, ref, and evidence links.
-5. Wait for automated validation. The repository will apply `validated` or `needs-info`.
+4. Fill in agent name, agent version, benchmark variant, track, skill version, dataset version, run id, score, pass rate, repository URL, ref, and evidence links.
+5. If available, also include `runtime_ms` and `cost_usd` from `score_summary.json`.
+6. Wait for automated validation. The repository will apply `validated` or `needs-info`.
 
 Rules:
 

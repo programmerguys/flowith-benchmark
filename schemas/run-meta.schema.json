@@ -1,0 +1,145 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/programmerguys/flowith-benchmark/main/schemas/run-meta.schema.json",
+  "title": "Flowith Benchmark Run Metadata",
+  "type": "object",
+  "required": [
+    "run_id",
+    "agent_name",
+    "agent_version",
+    "benchmark_variant",
+    "skill_version",
+    "dataset_version",
+    "track",
+    "task_filter_ref",
+    "start_time",
+    "end_time",
+    "timezone",
+    "environment",
+    "retry_policy"
+  ],
+  "properties": {
+    "run_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "agent_name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "agent_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "benchmark_variant": {
+      "type": "string",
+      "minLength": 1
+    },
+    "model_name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "model_version": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "skill_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "dataset_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "track": {
+      "type": "string",
+      "enum": [
+        "open",
+        "verified"
+      ]
+    },
+    "task_filter_ref": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "start_time": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "end_time": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "timezone": {
+      "type": "string",
+      "minLength": 1
+    },
+    "environment": {
+      "oneOf": [
+        {
+          "type": "string",
+          "minLength": 1
+        },
+        {
+          "type": "object",
+          "required": [
+            "os",
+            "runtime"
+          ],
+          "properties": {
+            "os": {
+              "type": "string",
+              "minLength": 1
+            },
+            "runtime": {
+              "type": "string",
+              "minLength": 1
+            },
+            "tools": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "notes": {
+              "type": "string"
+            }
+          }
+        }
+      ]
+    },
+    "retry_policy": {
+      "type": "object",
+      "required": [
+        "max_retries_per_task",
+        "score_mode"
+      ],
+      "properties": {
+        "max_retries_per_task": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "score_mode": {
+          "type": "string",
+          "enum": [
+            "final_attempt_only"
+          ]
+        },
+        "notes": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    }
+  }
+}
