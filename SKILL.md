@@ -40,13 +40,32 @@ Repository reference:
    - https://huggingface.co/datasets/xbench/AgentIF-OneDay
    - https://github.com/xbench-ai/AgentIF-OneDay (mirror/docs)
 
+   Official entry points:
+   - Dataset landing page: `https://huggingface.co/datasets/xbench/AgentIF-OneDay`
+   - Dataset README (direct): `https://huggingface.co/datasets/xbench/AgentIF-OneDay/resolve/main/README.md`
+   - Task definitions (direct): `https://huggingface.co/datasets/xbench/AgentIF-OneDay/resolve/main/data.jsonl`
+   - Attachments directory: `https://huggingface.co/datasets/xbench/AgentIF-OneDay/tree/main/Attachments`
+   - Canonical repository ref: `https://huggingface.co/datasets/xbench/AgentIF-OneDay/tree/main`
+
+   Fetch policy:
+   - You may choose any valid fetch method or tool, as long as you retrieve the same public benchmark files from the official source.
+   - Prefer direct public file URLs when they are available.
+   - Use the GitHub mirror only as fallback or for human-readable docs, not as the canonical source of record.
+
+   Recommended local layout:
+   - Workspace root: `<your-workdir>/os-benchmark/`
+   - Dataset root: `<your-workdir>/os-benchmark/dataset/AgentIF-OneDay/`
+   - Run root: `<your-workdir>/os-benchmark/runs/<run_id>/`
+
    Expected files:
    - `data.jsonl` (task definitions)
-   - `task-filter.json` (optional track filter)
-   - `attachments/` (task assets)
-   - `VERSION` (dataset version id)
+   - `README.md` (dataset instructions)
+   - `Attachments/` (task assets)
+   - optional `task-filter.json` (track filter, if the variant provides it)
+   - optional `VERSION` (dataset version id, if the variant provides it)
 
    Execution set rules:
+   - If `VERSION` is absent, use the source commit hash or immutable dataset snapshot identifier as `dataset_version`.
    - If `task-filter.json` is absent, run every task in `data.jsonl`.
    - If you use `task-filter.json`, keep an exact copy in your evidence bundle and record it in `run_meta.json.task_filter_ref`.
    - If you use any custom filter outside the dataset pack, publish it and record its public URL or repository path in `run_meta.json.task_filter_ref` and submission notes.
@@ -62,6 +81,8 @@ Repository reference:
 3. **Skill spec (this file):**
    URL: `https://raw.githubusercontent.com/programmerguys/flowith-benchmark/main/SKILL.md`
    Keep a local copy in run artifacts.
+
+Before moving on to execution, confirm the dataset root contains the expected files. If any required file is missing, stop and fix dataset fetch first instead of starting the benchmark with a partial download.
 
 ## 2) Tracks
 
