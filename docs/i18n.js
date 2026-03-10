@@ -28,23 +28,25 @@ const TRANSLATIONS = {
     nav: {
       repoAriaLabel: 'Flowith Benchmark GitHub repository',
       githubStars: '{count} stars',
-      localeLabel: 'Language'
+      localeLabel: 'Language',
+      themeToggle: 'Theme: {mode}'
     },
     hero: {
       eyebrow: 'Public Agent Benchmark',
-      promptKicker: 'Send this to your agent',
-      promptTitle: 'One prompt to run the benchmark',
+      promptKickerLead: 'Send this',
+      promptKickerTail: 'to your agent',
+      promptMessageLead: 'Fetch the Flowith Benchmark skill from',
+      promptMessageTail: 'and follow it.',
       copyPrompt: 'Copy Prompt',
       copyCopied: 'Copied',
       copyFeedbackDefault: 'Fetch the public skill, run the benchmark, then submit the public result.',
       copyFeedbackCopied: 'Copied. Send it to your agent.',
-      copyFeedbackError: 'Copy failed here. Use the command block above and retry.',
-      ecosystemAriaLabel: 'Agent ecosystem preview',
-      ecosystemKicker: 'Benchmarking the agent products people compare most',
-      chipsAriaLabel: 'Highlights',
-      chipBenchmark: 'Public benchmark',
-      chipEvidence: 'Public evidence',
-      chipIntake: 'GitHub-native intake'
+      copyFeedbackError: 'Copy failed here. Use the command block above and retry.'
+    },
+    theme: {
+      system: 'System',
+      light: 'Light',
+      dark: 'Dark'
     },
     leaderboard: {
       kicker: 'Leaderboard',
@@ -144,23 +146,25 @@ const TRANSLATIONS = {
     nav: {
       repoAriaLabel: 'Flowith Benchmark GitHub 仓库',
       githubStars: '{count} 星标',
-      localeLabel: '语言'
+      localeLabel: '语言',
+      themeToggle: '主题：{mode}'
     },
     hero: {
       eyebrow: '公开 Agent Benchmark',
-      promptKicker: '把这段发给你的 Agent',
-      promptTitle: '一句提示词跑完整套 benchmark',
+      promptKickerLead: '把这个',
+      promptKickerTail: '发给你的 Agent',
+      promptMessageLead: '获取 Flowith Benchmark 的技能文件：',
+      promptMessageTail: '然后按文件说明执行。',
       copyPrompt: '复制 Prompt',
       copyCopied: '已复制',
       copyFeedbackDefault: '获取公开 skill，执行 benchmark，然后提交公开结果。',
       copyFeedbackCopied: '已复制，直接发给你的 Agent 即可。',
-      copyFeedbackError: '这里复制失败了，请直接使用上面的命令块。',
-      ecosystemAriaLabel: 'Agent 生态预览',
-      ecosystemKicker: '聚焦大家最常拿来比较的 Agent 产品',
-      chipsAriaLabel: '亮点',
-      chipBenchmark: '公开 benchmark',
-      chipEvidence: '公开证据',
-      chipIntake: 'GitHub 原生提交流程'
+      copyFeedbackError: '这里复制失败了，请直接使用上面的命令块。'
+    },
+    theme: {
+      system: '跟随系统',
+      light: '明亮模式',
+      dark: '暗色模式'
     },
     leaderboard: {
       kicker: '排行榜',
@@ -252,23 +256,25 @@ const TRANSLATIONS = {
     nav: {
       repoAriaLabel: 'Flowith Benchmark GitHub リポジトリ',
       githubStars: '{count} スター',
-      localeLabel: '言語'
+      localeLabel: '言語',
+      themeToggle: 'テーマ: {mode}'
     },
     hero: {
       eyebrow: '公開 Agent Benchmark',
-      promptKicker: 'これを Agent に送る',
-      promptTitle: '1つのプロンプトで benchmark を実行',
+      promptKickerLead: 'この',
+      promptKickerTail: 'を Agent に送る',
+      promptMessageLead: 'Flowith Benchmark の skill を取得: ',
+      promptMessageTail: 'そのまま指示に従ってください。',
       copyPrompt: 'Prompt をコピー',
       copyCopied: 'コピー済み',
       copyFeedbackDefault: '公開 skill を取得し、benchmark を実行して、公開結果を送信します。',
       copyFeedbackCopied: 'コピーしました。そのまま Agent に送ってください。',
-      copyFeedbackError: 'ここではコピーできませんでした。上のコマンドブロックをそのまま使ってください。',
-      ecosystemAriaLabel: 'Agent エコシステムのプレビュー',
-      ecosystemKicker: '比較されることの多い Agent プロダクトを benchmark',
-      chipsAriaLabel: 'ハイライト',
-      chipBenchmark: '公開 benchmark',
-      chipEvidence: '公開エビデンス',
-      chipIntake: 'GitHub ネイティブ受付'
+      copyFeedbackError: 'ここではコピーできませんでした。上のコマンドブロックをそのまま使ってください。'
+    },
+    theme: {
+      system: 'システム',
+      light: 'ライト',
+      dark: 'ダーク'
     },
     leaderboard: {
       kicker: 'ランキング',

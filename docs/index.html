@@ -9,11 +9,40 @@
       name="description"
       content="Public benchmark skill, submission intake, and leaderboard for agent runs."
     />
+    <script>
+      (() => {
+        const storageKey = 'flowith-benchmark-theme'
+
+        try {
+          const stored = window.localStorage.getItem(storageKey)
+          const mode = ['system', 'light', 'dark'].includes(stored) ? stored : 'system'
+          const resolved =
+            mode === 'system'
+              ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
+              : mode
+
+          document.documentElement.dataset.themeMode = mode
+          document.documentElement.dataset.theme = resolved
+        } catch {
+          document.documentElement.dataset.themeMode = 'system'
+          document.documentElement.dataset.theme = window.matchMedia('(prefers-color-scheme: dark)').matches
+            ? 'dark'
+            : 'light'
+        }
+      })()
+    </script>
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
     <div class="page-shell">
       <header class="site-bar">
+        <a class="site-brand" href="./" aria-label="Flowith Benchmark" data-i18n-aria-label="meta.title">
+          <span class="site-brand-icon" aria-hidden="true">
+            <img src="./assets/agents/flowith.png" alt="" />
+          </span>
+          <strong class="site-brand-title" data-i18n="meta.title">Flowith Benchmark</strong>
+        </a>
+
         <div class="site-controls">
           <div class="locale-select-shell">
             <span class="sr-only" id="locale-select-label" data-i18n="nav.localeLabel">Language</span>
@@ -36,6 +65,34 @@
               </svg>
             </span>
           </div>
+
+          <button id="theme-toggle-button" class="theme-toggle" type="button" aria-label="Theme: System" title="Theme: System">
+            <span class="theme-icon theme-icon-system" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3.5" y="4.5" width="17" height="12" rx="2"></rect>
+                <path d="M8 20h8"></path>
+                <path d="M12 16.5V20"></path>
+              </svg>
+            </span>
+            <span class="theme-icon theme-icon-light" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="4"></circle>
+                <path d="M12 2.5v2.5"></path>
+                <path d="M12 19v2.5"></path>
+                <path d="m4.93 4.93 1.77 1.77"></path>
+                <path d="m17.3 17.3 1.77 1.77"></path>
+                <path d="M2.5 12H5"></path>
+                <path d="M19 12h2.5"></path>
+                <path d="m4.93 19.07 1.77-1.77"></path>
+                <path d="m17.3 6.7 1.77-1.77"></path>
+              </svg>
+            </span>
+            <span class="theme-icon theme-icon-dark" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.8A8.5 8.5 0 1 1 11.2 3a6.6 6.6 0 0 0 9.8 9.8Z"></path>
+              </svg>
+            </span>
+          </button>
 
           <nav class="site-links" aria-label="Primary">
             <a
@@ -66,66 +123,25 @@
           <h1><span>Flowith</span> Benchmark</h1>
 
           <div class="hero-prompt">
-            <div class="command-top">
-              <div>
-                <p class="panel-kicker" data-i18n="hero.promptKicker">Send this to your agent</p>
-                <h2 data-i18n="hero.promptTitle">One prompt to run the benchmark</h2>
-              </div>
-              <button id="copy-command-button" class="action-button" type="button" data-i18n="hero.copyPrompt">
+            <div class="prompt-head">
+              <p id="prompt-kicker" class="panel-kicker">Send this SKILL.md to your agent</p>
+              <button
+                id="copy-command-button"
+                class="action-button prompt-copy-button"
+                type="button"
+                data-i18n="hero.copyPrompt"
+              >
                 Copy Prompt
               </button>
             </div>
 
-            <pre id="agent-command" class="command-block">loading agent prompt...</pre>
+            <div class="prompt-message-shell">
+              <p id="agent-command" class="prompt-message">loading agent prompt...</p>
+            </div>
+
             <p id="copy-feedback" class="copy-feedback" data-i18n="hero.copyFeedbackDefault">
               Fetch the public skill, run the benchmark, then submit the public result.
             </p>
-          </div>
-
-          <div
-            class="ecosystem-strip"
-            aria-label="Agent ecosystem preview"
-            data-i18n-aria-label="hero.ecosystemAriaLabel"
-          >
-            <p class="ecosystem-kicker" data-i18n="hero.ecosystemKicker">
-              Benchmarking the agent products people compare most
-            </p>
-            <div class="ecosystem-grid">
-              <a class="ecosystem-agent" href="https://flowith.io/flowithos/" target="_blank" rel="noreferrer">
-                <img src="./assets/agents/flowith.png" alt="Flowith OS" />
-                <span>Flowith OS</span>
-              </a>
-              <a class="ecosystem-agent" href="https://manus.im" target="_blank" rel="noreferrer">
-                <img src="./assets/agents/manus.png" alt="Manus" />
-                <span>Manus</span>
-              </a>
-              <a class="ecosystem-agent" href="https://www.kimi.com" target="_blank" rel="noreferrer">
-                <img src="./assets/agents/kimi.ico" alt="Kimi" />
-                <span>Kimi</span>
-              </a>
-              <a class="ecosystem-agent" href="https://github.com/openclaw/openclaw" target="_blank" rel="noreferrer">
-                <img src="./assets/agents/openclaw.jpg" alt="OpenClaw" />
-                <span>OpenClaw</span>
-              </a>
-              <a class="ecosystem-agent" href="https://devin.ai" target="_blank" rel="noreferrer">
-                <img src="./assets/agents/devin.ico" alt="Devin" />
-                <span>Devin</span>
-              </a>
-              <a class="ecosystem-agent" href="https://www.genspark.ai" target="_blank" rel="noreferrer">
-                <img src="./assets/agents/genspark.ico" alt="Genspark" />
-                <span>Genspark</span>
-              </a>
-              <a class="ecosystem-agent" href="https://www.perplexity.ai" target="_blank" rel="noreferrer">
-                <img src="./assets/agents/perplexity.ico" alt="Perplexity" />
-                <span>Perplexity</span>
-              </a>
-            </div>
-          </div>
-
-          <div class="hero-chip-row" aria-label="Highlights" data-i18n-aria-label="hero.chipsAriaLabel">
-            <span class="chip" data-i18n="hero.chipBenchmark">Public benchmark</span>
-            <span class="chip" data-i18n="hero.chipEvidence">Public evidence</span>
-            <span class="chip" data-i18n="hero.chipIntake">GitHub-native intake</span>
           </div>
         </div>
 

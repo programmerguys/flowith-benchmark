@@ -5,11 +5,14 @@ const REPO_OWNER = 'programmerguys'
 const REPO_NAME = 'flowith-benchmark'
 const API_BASE = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}`
 const SKILL_URL = `https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/main/SKILL.md`
+const SKILL_FILE_NAME = 'SKILL.md'
 const ISSUE_LABEL = 'validated'
 const EXCLUDED_LABELS = new Set(['smoke-test'])
 const HIDDEN_DETAIL_LABELS = new Set(['mock', 'preview'])
 const GITHUB_STARS = '2.4k'
-const AGENT_PROMPT = `Fetch ${SKILL_URL} and follow it.`
+const THEME_STORAGE_KEY = 'flowith-benchmark-theme'
+const THEME_MODES = Object.freeze(['system', 'light', 'dark'])
+const systemThemeMedia = window.matchMedia('(prefers-color-scheme: dark)')
 
 const DATA_MODE = {
   LIVE: 'live',
@@ -34,9 +37,12 @@ const FIELD_MAP = {
 }
 
 const i18n = createI18n(getInitialLocale())
+const initialThemeMode = getInitialThemeMode()
 
 const state = {
   locale: i18n.locale,
+  themeMode: initialThemeMode,
+  resolvedTheme: resolveTheme(initialThemeMode),
   hasLoaded: false,
   dataMode: DATA_MODE.LIVE,
   submissions: [],
@@ -49,6 +55,8 @@ const elements = {
   metaDescription: document.getElementById('page-description'),
   githubStarsLabel: document.getElementById('github-stars-label'),
   localeSelect: document.getElementById('locale-select'),
+  themeToggleButton: document.getElementById('theme-toggle-button'),
+  promptKicker: document.getElementById('prompt-kicker'),
   agentCommand: document.getElementById('agent-command'),
   copyCommandButton: document.getElementById('copy-command-button'),
   copyFeedback: document.getElementById('copy-feedback'),
@@ -69,6 +77,60 @@ let copyResetTimer = null
 
 function t(key, values) {
   return i18n.t(key, values)
+}
+
+function normalizeThemeMode(candidate) {
+  return THEME_MODES.includes(candidate) ? candidate : 'system'
+}
+
+function getInitialThemeMode() {
+  try {
+    return normalizeThemeMode(window.localStorage.getItem(THEME_STORAGE_KEY))
+  } catch {
+    return 'system'
+  }
+}
+
+function resolveTheme(themeMode) {
+  if (themeMode === 'system') {
+    return systemThemeMedia.matches ? 'dark' : 'light'
+  }
+
+  return themeMode
+}
+
+function updateThemeToggle() {
+  if (!elements.themeToggleButton) return
+
+  const modeLabel = t(`theme.${state.themeMode}`)
+  const buttonLabel = t('nav.themeToggle', { mode: modeLabel })
+  elements.themeToggleButton.dataset.themeMode = state.themeMode
+  elements.themeToggleButton.setAttribute('aria-label', buttonLabel)
+  elements.themeToggleButton.title = buttonLabel
+}
+
+function applyTheme(themeMode, { persist = true } = {}) {
+  state.themeMode = normalizeThemeMode(themeMode)
+  state.resolvedTheme = resolveTheme(state.themeMode)
+
+  document.documentElement.dataset.themeMode = state.themeMode
+  document.documentElement.dataset.theme = state.resolvedTheme
+
+  if (persist) {
+    try {
+      window.localStorage.setItem(THEME_STORAGE_KEY, state.themeMode)
+    } catch {
+      console.warn('[Leaderboard] failed to persist theme mode')
+    }
+  }
+
+  updateThemeToggle()
+}
+
+function cycleThemeMode() {
+  const currentIndex = THEME_MODES.indexOf(state.themeMode)
+  const nextThemeMode = THEME_MODES[(currentIndex + 1) % THEME_MODES.length]
+  applyTheme(nextThemeMode)
 }
 
 function escapeHtml(value) {
@@ -157,13 +219,35 @@ function formatDateTime(value) {
   }).format(date)
 }
 
+function getAgentPromptText() {
+  if (state.locale === 'en') {
+    return `${t('hero.promptMessageLead')} ${SKILL_URL} ${t('hero.promptMessageTail')}`.replace(/\s+/g, ' ').trim()
+  }
+
+  return `${t('hero.promptMessageLead')}${SKILL_URL}${t('hero.promptMessageTail')}`.trim()
+}
+
+function renderPromptKicker() {
+  const joiner = state.locale === 'en' ? ' ' : ''
+
+  elements.promptKicker.innerHTML =
+    `<span>${escapeHtml(t('hero.promptKickerLead'))}${joiner}</span>` +
+    `<span class="prompt-kicker-keyword">${escapeHtml(SKILL_FILE_NAME)}</span>` +
+    `<span>${joiner}${escapeHtml(t('hero.promptKickerTail'))}</span>`
+}
+
 function renderAgentPrompt() {
-  elements.agentCommand.textContent = AGENT_PROMPT
+  const joiner = state.locale === 'en' ? ' ' : ''
+
+  elements.agentCommand.innerHTML =
+    `<span>${escapeHtml(t('hero.promptMessageLead'))}${joiner}</span>` +
+    `<span class="prompt-inline-url">${escapeHtml(SKILL_URL)}</span>` +
+    `<span>${joiner}${escapeHtml(t('hero.promptMessageTail'))}</span>`
 }
 
 async function copyAgentPrompt() {
   try {
-    await navigator.clipboard.writeText(AGENT_PROMPT)
+    await navigator.clipboard.writeText(getAgentPromptText())
     elements.copyCommandButton.textContent = t('hero.copyCopied')
     elements.copyFeedback.textContent = t('hero.copyFeedbackCopied')
 
@@ -186,6 +270,7 @@ function applyStaticTranslations() {
   document.title = t('meta.title')
   elements.metaDescription.setAttribute('content', t('meta.description'))
   elements.githubStarsLabel.textContent = t('nav.githubStars', { count: GITHUB_STARS })
+  renderPromptKicker()
 
   document.querySelectorAll('[data-i18n]').forEach(node => {
     node.textContent = t(node.dataset.i18n)
@@ -196,6 +281,7 @@ function applyStaticTranslations() {
   })
 
   elements.localeSelect.value = state.locale
+  updateThemeToggle()
 }
 
 function parseNumber(value) {
@@ -318,7 +404,11 @@ function compareSubmissions(a, b) {
 
 function renderAgentAvatar(submission, className = 'agent-avatar') {
   if (submission.agentIconUrl) {
-    return `<img class="${className}" src="${escapeHtml(submission.agentIconUrl)}" alt="${escapeHtml(getAgentName(submission))}" loading="lazy" />`
+    const avatarClass = submission.agentIconUrl.includes('/flowith.png')
+      ? `${className} agent-avatar-plain`
+      : className
+
+    return `<img class="${avatarClass}" src="${escapeHtml(submission.agentIconUrl)}" alt="${escapeHtml(getAgentName(submission))}" loading="lazy" />`
   }
 
   const initials = getAgentName(submission)
@@ -675,6 +765,25 @@ elements.localeSelect.addEventListener('change', event => {
   applyLocale(nextLocale)
 })
 
+elements.themeToggleButton.addEventListener('click', () => {
+  cycleThemeMode()
+})
+
+if (typeof systemThemeMedia.addEventListener === 'function') {
+  systemThemeMedia.addEventListener('change', () => {
+    if (state.themeMode === 'system') {
+      applyTheme('system', { persist: false })
+    }
+  })
+} else if (typeof systemThemeMedia.addListener === 'function') {
+  systemThemeMedia.addListener(() => {
+    if (state.themeMode === 'system') {
+      applyTheme('system', { persist: false })
+    }
+  })
+}
+
+applyTheme(state.themeMode, { persist: false })
 applyStaticTranslations()
 renderAgentPrompt()
 renderPendingSummary()
